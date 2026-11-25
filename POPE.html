@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>POPE — Premium & POPEmix (Telegram Mini App)</title>
+<title>POPE — Premium & POPEmix</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -48,7 +48,7 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 </head> 
 <body class="h-screen w-screen flex justify-center items-center bg-black"> 
 
-<!-- AUTH OVERLAY (LOGIN / REGISTER FALLBACK FOR NON-TELEGRAM BROWSER) -->
+<!-- AUTH OVERLAY (STANDARD USERNAME & PASSWORD LOGIN / REGISTER ONLY) -->
 <div id="pope-auth-modal" class="hidden absolute inset-0 z-50 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4">
   <div class="bg-popePanelBg border border-zinc-800 w-full max-w-sm rounded-3xl p-6 shadow-2xl flex flex-col space-y-5">
 	
@@ -56,18 +56,7 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 	<div class="text-center space-y-1">
 	  <div class="w-12 h-12 bg-white text-black font-bold text-xl rounded-2xl mx-auto flex items-center justify-center shadow-lg mb-3">P</div>
 	  <h2 id="pope-auth-title" class="text-lg font-bold text-white tracking-wide">Welcome to POPE</h2>
-	  <p id="pope-auth-subtitle" class="text-xs text-zinc-400">Sign in to your account or launch via Telegram Bot</p>
-	</div>
-
-	<!-- TELEGRAM QUICK CONNECT BANNER -->
-	<div class="p-3 rounded-2xl bg-sky-950/40 border border-sky-500/30 flex items-center justify-between gap-2">
-	  <div class="text-[10px] text-sky-200 leading-relaxed">
-		<strong class="block text-xs text-white">Telegram Mini App Mode</strong>
-		<span id="pope-tg-env-status" class="text-sky-300/80 font-mono">Checking Telegram WebApp...</span>
-	  </div>
-	  <button onclick="tryTelegramAutoLogin(true)" class="px-3 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-black text-[11px] font-bold flex-shrink-0 transition">
-		TG Login
-	  </button>
+	  <p id="pope-auth-subtitle" class="text-xs text-zinc-400">เข้าสู่ระบบด้วยบัญชีของคุณ</p>
 	</div>
 
 	<!-- TABS SWITCHER -->
@@ -84,8 +73,8 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 	  </div>
 
 	  <div>
-		<label class="text-[10px] text-zinc-400 mb-1 block uppercase font-semibold">Username / Email</label>
-		<input id="pope-auth-username" type="text" placeholder="pope_user" class="w-full bg-zinc-900 text-white text-xs rounded-xl px-3.5 py-2.5 border border-zinc-800 focus:outline-none focus:ring-1 focus:ring-white font-mono">
+		<label class="text-[10px] text-zinc-400 mb-1 block uppercase font-semibold">Username</label>
+		<input id="pope-auth-username" type="text" placeholder="pope_member" class="w-full bg-zinc-900 text-white text-xs rounded-xl px-3.5 py-2.5 border border-zinc-800 focus:outline-none focus:ring-1 focus:ring-white font-mono">
 	  </div>
 
 	  <div>
@@ -102,7 +91,7 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 	<div id="pope-auth-switch-text" class="text-center text-xs text-zinc-500">
 	  Don't have an account? <span onclick="switchAuthMode('register')" class="text-white font-semibold cursor-pointer underline">Register</span>
 	</div>
-	<p class="text-[10px] text-zinc-600 text-center leading-relaxed">User Demo: <span class="font-mono text-zinc-400">pope_member</span> · Admin: <span class="font-mono text-amber-400">pope_creator</span> (<span class="font-mono text-zinc-400">password123</span>)</p>
+	<p class="text-[10px] text-zinc-600 text-center leading-relaxed">Demo: <span class="font-mono text-zinc-400">pope_member</span> / <span class="font-mono text-zinc-400">password123</span></p>
 
   </div>
 </div>
@@ -127,20 +116,17 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 		POPE
 		<i data-lucide="chevron-down" class="w-3 h-3 text-zinc-400 group-hover:text-white transition"></i>
 	  </span>
-	  <span id="pope-header-username" class="text-[9px] text-zinc-400 font-mono mt-0.5">@pope_creator</span>
+	  <span id="pope-header-username" class="text-[9px] text-zinc-400 font-mono mt-0.5">@pope_member</span>
 	</div>
   </button>
 
-  <!-- ACTIONS: Telegram Bot + Notif + Dual Points Pill -->
+  <!-- ACTIONS: Notif + Dual Points Pill -->
   <div class="pointer-events-auto flex items-center gap-1.5">
-	<button onclick="openTelegramBotLink()" class="w-8 h-8 flex items-center justify-center rounded-full bg-sky-500/20 border border-sky-400/40 text-sky-300 hover:bg-sky-500/30 transition" title="เปิดแชต Telegram Bot">
-	  <i data-lucide="send" class="w-3.5 h-3.5"></i>
-	</button>
 	<button onclick="openPopeNotifDrawer()" class="relative w-8 h-8 flex items-center justify-center rounded-full bg-zinc-900/80 border border-zinc-700/80 text-white hover:bg-zinc-800 transition" aria-label="Notifications">
 	  <i data-lucide="bell" class="w-3.5 h-3.5"></i>
 	  <span id="pope-notif-badge" class="hidden absolute -top-0.5 -right-0.5 min-w-[14px] h-3.5 px-1 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">0</span>
 	</button>
-	<div onclick="openTopupModal('pay')" class="bg-zinc-900/85 border border-zinc-700/80 backdrop-blur-md px-2 py-1 rounded-full flex items-center gap-1.5 cursor-pointer hover:border-yellow-500/50 transition" title="P1: เติม(ถอนไม่ได้) / P2: ได้จากคนอื่น(ถอนได้)">
+	<div onclick="openTopupModal('pay')" class="bg-zinc-900/85 border border-zinc-700/80 backdrop-blur-md px-2 py-1 rounded-full flex items-center gap-1.5 cursor-pointer hover:border-yellow-500/50 transition" title="แต้มเติม / แต้มถอนได้">
 	  <span class="flex items-center gap-0.5 text-[10px] font-mono font-bold text-yellow-400">
 		<i data-lucide="coins" class="w-3 h-3"></i>
 		<span id="pope-header-balance">0</span>
@@ -199,7 +185,7 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
   </button>
 </nav>
 
-<!-- TOP-UP QR, WITHDRAW P2 & SLIP VERIFICATION MODAL -->
+<!-- TOP-UP QR & WITHDRAW MODAL (ADMIN TAB ONLY SHOWN WHEN VERIFIED VIA BOT LINK) -->
 <div id="pope-topup-modal" class="hidden absolute inset-0 z-[60] bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
   <div class="bg-popePanelBg border border-zinc-800 w-full max-w-sm rounded-2xl p-4 shadow-2xl flex flex-col space-y-3.5 max-h-[92vh] overflow-y-auto no-scrollbar">
 	<div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
@@ -210,26 +196,26 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 	  <button onclick="closeTopupModal()" class="text-zinc-400 hover:text-white transition p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
 	</div>
 
-	<!-- MODE SWITCH: TOP-UP P1 / WITHDRAW P2 / ADMIN -->
-	<div class="grid grid-cols-3 gap-1 bg-zinc-900 p-1 rounded-xl text-[10px] font-medium border border-zinc-800">
-	  <button id="pope-topup-tab-pay" onclick="switchTopupTab('pay')" class="py-1.5 rounded-lg bg-white text-black font-semibold transition">เติม P1 (ถอนไม่ได้)</button>
-	  <button id="pope-topup-tab-withdraw" onclick="switchTopupTab('withdraw')" class="py-1.5 rounded-lg text-zinc-400 hover:text-white transition">ถอน P2 (ได้มา)</button>
-	  <button id="pope-topup-tab-admin" onclick="switchTopupTab('admin')" class="py-1.5 rounded-lg text-zinc-400 hover:text-white transition flex items-center justify-center gap-1">
+	<!-- MODE SWITCH -->
+	<div id="pope-topup-tabs-grid" class="grid grid-cols-2 gap-1 bg-zinc-900 p-1 rounded-xl text-[10px] font-medium border border-zinc-800">
+	  <button id="pope-topup-tab-pay" onclick="switchTopupTab('pay')" class="py-1.5 rounded-lg bg-white text-black font-semibold transition">เติม Point</button>
+	  <button id="pope-topup-tab-withdraw" onclick="switchTopupTab('withdraw')" class="py-1.5 rounded-lg text-zinc-400 hover:text-white transition">ถอน Point</button>
+	  <button id="pope-topup-tab-admin" onclick="switchTopupTab('admin')" class="hidden py-1.5 rounded-lg text-zinc-400 hover:text-white transition items-center justify-center gap-1">
 		<i data-lucide="shield-check" class="w-3 h-3"></i>
-		<span>Admin</span>
+		<span>จัดการ</span>
 		<span id="pope-admin-pending-badge" class="hidden px-1 py-0.2 rounded-full bg-amber-500 text-black text-[9px] font-bold">0</span>
 	  </button>
 	</div>
 
-	<!-- TAB 1: SCAN QR & UPLOAD SLIP (POINT TYPE 1: NON-WITHDRAWABLE) -->
+	<!-- TAB 1: SCAN QR & UPLOAD SLIP (SENT REALTIME TO TELEGRAM BOT STORAGE & ADMIN) -->
 	<div id="pope-topup-pay-view" class="space-y-3">
 	  <div class="p-2.5 rounded-xl bg-yellow-950/25 border border-yellow-500/25 text-[10px] text-yellow-200/90 leading-relaxed">
-		<strong>Point แบบที่ 1 (เติม):</strong> ใช้จ่ายได้ทุกอย่างในระบบ (Gift, Mix, Monthly) · <span class="underline">ถอนออกไม่ได้</span>
+		<strong>Point เติม:</strong> ใช้ส่งของขวัญ, ค่า Mix และสมัคร POPE Monthly
 	  </div>
 
 	  <!-- AMOUNT PRESETS -->
 	  <div>
-		<span class="text-[10px] text-zinc-400 uppercase font-semibold block mb-1.5">เลือกจำนวน Point แบบที่ 1 ที่ต้องการเติม</span>
+		<span class="text-[10px] text-zinc-400 uppercase font-semibold block mb-1.5">เลือกจำนวน Point ที่ต้องการเติม</span>
 		<div class="grid grid-cols-4 gap-1.5">
 		  <button type="button" onclick="selectTopupPoints(100)" data-topup-pts="100" class="pope-topup-preset py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-xs font-mono font-bold text-white hover:border-yellow-400 transition">100p</button>
 		  <button type="button" onclick="selectTopupPoints(300)" data-topup-pts="300" class="pope-topup-preset py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-xs font-mono font-bold text-white hover:border-yellow-400 transition">300p</button>
@@ -237,30 +223,30 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 		  <button type="button" onclick="selectTopupPoints(1000)" data-topup-pts="1000" class="pope-topup-preset py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-xs font-mono font-bold text-white hover:border-yellow-400 transition">1000p</button>
 		</div>
 		<div class="mt-2 flex items-center justify-between bg-zinc-900 rounded-xl px-3 py-1.5 border border-zinc-800">
-		  <span class="text-[10px] text-zinc-400">กำหนดเอง (Point แบบที่ 1)</span>
+		  <span class="text-[10px] text-zinc-400">กำหนดจำนวน Point</span>
 		  <input id="pope-topup-points-input" type="number" min="10" value="100" oninput="refreshTopupQrDisplay()" class="w-24 bg-transparent text-right text-xs font-mono font-bold text-yellow-400 focus:outline-none">
 		</div>
 	  </div>
 
 	  <!-- QR CODE BOX -->
 	  <div class="p-3 bg-zinc-900/90 border border-zinc-800 rounded-2xl flex flex-col items-center text-center space-y-2">
-		<div class="text-[10px] text-zinc-400">สแกน QR เพื่อโอนเงินเข้าบัญชี <strong class="text-white">POPE OFFICIAL WALLET</strong></div>
+		<div class="text-[10px] text-zinc-400">สแกน QR เพื่อโอนเงินเข้าบัญชี <strong class="text-white">POPE WALLET</strong></div>
 		<div class="p-2.5 bg-white rounded-2xl shadow-lg flex items-center justify-center">
 		  <img id="pope-topup-custom-qr-img" src="" class="hidden w-36 h-36 object-contain" alt="Payment QR">
 		  <canvas id="pope-topup-qr-canvas" width="144" height="144" class="block"></canvas>
 		</div>
-		<div class="text-[11px] font-mono text-white">ยอดโอน: <strong id="pope-topup-amount-label" class="text-yellow-400">100 Points</strong></div>
+		<div class="text-[11px] font-mono text-white">ยอดเติม: <strong id="pope-topup-amount-label" class="text-yellow-400">100 Points</strong></div>
 		<div id="pope-topup-ref-label" class="text-[10px] font-mono text-zinc-500">REF: POPE-000000</div>
 	  </div>
 
 	  <!-- SLIP UPLOAD -->
 	  <div class="space-y-2">
-		<label class="text-[10px] text-zinc-400 uppercase font-semibold block">อัปโหลดสลิปโอนเงินให้ Telegram Bot / Admin ตรวจ</label>
+		<label class="text-[10px] text-zinc-400 uppercase font-semibold block">แนบสลิปการโอนเงิน</label>
 		<div class="w-full h-24 rounded-xl gradient-bg-card flex flex-col items-center justify-center border border-zinc-700/80 relative cursor-pointer hover:border-yellow-400/60 transition overflow-hidden">
 		  <img id="pope-slip-preview-img" src="" class="hidden w-full h-full object-contain bg-black" alt="Slip preview">
 		  <div id="pope-slip-placeholder" class="flex flex-col items-center justify-center pointer-events-none">
 			<i data-lucide="upload-cloud" class="w-5 h-5 text-yellow-400 mb-1"></i>
-			<span class="text-[11px] text-zinc-200 font-medium">แตะเพื่อเลือกไฟล์สลิป (*/*)</span>
+			<span class="text-[11px] text-zinc-200 font-medium">แตะเพื่อเลือกไฟล์สลิป</span>
 		  </div>
 		  <input id="pope-slip-file-input" type="file" accept="*/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="handleSlipFileUpload(event)">
 		</div>
@@ -269,114 +255,68 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 	  </div>
 
 	  <button onclick="submitTopupSlipRequest()" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2.5 rounded-xl transition shadow-lg text-xs tracking-wider uppercase active:scale-[0.99] flex items-center justify-center gap-1.5">
-		<i data-lucide="send" class="w-3.5 h-3.5"></i> ส่งสลิปให้ Admin ตรวจสอบ
+		<i data-lucide="send" class="w-3.5 h-3.5"></i> ส่งสลิปยืนยันการเติม
 	  </button>
 
 	  <!-- MY SLIP REQUESTS STATUS -->
 	  <div class="pt-2 border-t border-zinc-800 space-y-1.5">
-		<div class="text-[10px] text-zinc-400 uppercase font-semibold">สถานะสลิปที่ส่งแล้ว</div>
+		<div class="text-[10px] text-zinc-400 uppercase font-semibold">รายการเติมเงินของฉัน</div>
 		<div id="pope-my-topup-requests" class="space-y-1.5 max-h-28 overflow-y-auto no-scrollbar"></div>
 	  </div>
 	</div>
 
-	<!-- TAB 2: WITHDRAW POINT TYPE 2 (EARNED FROM OTHERS) -->
+	<!-- TAB 2: WITHDRAW POINT TYPE 2 (SENT REALTIME TO TELEGRAM BOT STORAGE & ADMIN) -->
 	<div id="pope-topup-withdraw-view" class="hidden space-y-3">
 	  <div class="p-3 rounded-xl bg-emerald-950/35 border border-emerald-500/30 flex items-center justify-between">
 		<div>
-		  <div class="text-[10px] text-emerald-300 uppercase font-bold">Point แบบที่ 2 (ได้จากคนอื่น · ถอนได้)</div>
-		  <div class="text-[10px] text-zinc-400 mt-0.5">Point แบบที่ 1 (เติม) ไม่สามารถถอนออกได้</div>
+		  <div class="text-[10px] text-emerald-300 uppercase font-bold">Point ที่ได้รับจากผู้อื่น (ถอนได้)</div>
+		  <div class="text-[10px] text-zinc-400 mt-0.5">ได้จากของขวัญหรือค่า Mix ที่คนอื่นจ่ายให้คุณ</div>
 		</div>
 		<div id="pope-withdraw-available-pts" class="text-base font-bold font-mono text-emerald-400">0p</div>
 	  </div>
 
 	  <div class="space-y-2">
-		<label class="text-[10px] text-zinc-400 uppercase font-semibold block">จำนวน Point แบบที่ 2 ที่ต้องการถอน</label>
+		<label class="text-[10px] text-zinc-400 uppercase font-semibold block">จำนวน Point ที่ต้องการถอน</label>
 		<input id="pope-withdraw-points-input" type="number" min="1" placeholder="เช่น 50" class="w-full bg-zinc-900 text-white text-xs rounded-xl px-3.5 py-2.5 border border-zinc-800 focus:outline-none focus:ring-1 focus:ring-emerald-400 font-mono">
 	  </div>
 
 	  <div class="space-y-2">
-		<label class="text-[10px] text-zinc-400 uppercase font-semibold block">ช่องทางรับเงิน / บัญชีปลายทาง</label>
-		<input id="pope-withdraw-dest-input" type="text" placeholder="เช่น BCEL / PromptPay / Wallet 020-xxxx" class="w-full bg-zinc-900 text-white text-xs rounded-xl px-3.5 py-2.5 border border-zinc-800 focus:outline-none focus:ring-1 focus:ring-emerald-400">
+		<label class="text-[10px] text-zinc-400 uppercase font-semibold block">ช่องทางรับเงิน / เลขบัญชี</label>
+		<input id="pope-withdraw-dest-input" type="text" placeholder="เช่น BCEL / PromptPay / Wallet" class="w-full bg-zinc-900 text-white text-xs rounded-xl px-3.5 py-2.5 border border-zinc-800 focus:outline-none focus:ring-1 focus:ring-emerald-400">
 	  </div>
 
 	  <button onclick="submitWithdrawRequest()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold py-2.5 rounded-xl transition shadow-lg text-xs tracking-wider uppercase active:scale-[0.99] flex items-center justify-center gap-1.5">
-		<i data-lucide="arrow-up-right" class="w-4 h-4"></i> ยืนยันถอน Point แบบที่ 2
+		<i data-lucide="arrow-up-right" class="w-4 h-4"></i> ยืนยันถอน Point
 	  </button>
 
 	  <div class="pt-2 border-t border-zinc-800 space-y-1.5">
-		<div class="text-[10px] text-zinc-400 uppercase font-semibold">ประวัติการถอน Point แบบที่ 2</div>
+		<div class="text-[10px] text-zinc-400 uppercase font-semibold">ประวัติการถอนของฉัน</div>
 		<div id="pope-my-withdraw-requests" class="space-y-1.5 max-h-32 overflow-y-auto no-scrollbar"></div>
 	  </div>
 	</div>
 
-	<!-- TAB 3: ADMIN SLIP & WITHDRAW VERIFICATION QUEUE -->
-	<div id="pope-topup-admin-view" class="hidden space-y-2.5">
-	  <!-- ADMIN LOGIN GATE -->
-	  <div id="pope-admin-lock-box" class="p-4 rounded-2xl bg-zinc-900/90 border border-zinc-800 space-y-3 text-center">
-		<div class="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-500/30 mx-auto flex items-center justify-center text-amber-400">
-		  <i data-lucide="lock" class="w-5 h-5"></i>
-		</div>
-		<div>
-		  <div class="text-xs font-bold text-white">ยืนยันสิทธิ์ผู้ดูแลระบบ (Admin Access)</div>
-		  <p class="text-[10px] text-zinc-400 mt-0.5">ตรวจสลิป & คำขอถอน P2 ได้ที่นี่ (Demo: <span class="font-mono text-zinc-200">admin1234</span>)</p>
-		</div>
-		<input id="pope-admin-passcode-input" type="password" placeholder="Admin Passcode" onkeydown="if(event.key==='Enter') unlockAdminPanel()" class="w-full bg-black text-white text-xs rounded-xl px-3 py-2 border border-zinc-700 focus:outline-none focus:ring-1 focus:ring-amber-400 font-mono text-center">
-		<button onclick="unlockAdminPanel()" class="w-full py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black text-xs font-bold transition">เข้าสู่ระบบ Admin</button>
-	  </div>
-
-	  <!-- UNLOCKED ADMIN CONTENT -->
-	  <div id="pope-admin-unlocked-box" class="hidden space-y-2.5">
-		<div class="flex items-center justify-between text-[10px] text-zinc-400 bg-zinc-900/70 px-3 py-2 rounded-xl border border-zinc-800">
-		  <span class="flex items-center gap-1.5 text-emerald-400 font-semibold"><i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Admin Verified</span>
-		  <div class="flex items-center gap-2">
-			<span id="pope-admin-queue-count" class="font-mono text-white">0 รายการ</span>
-			<button onclick="lockAdminPanel()" class="text-zinc-500 hover:text-rose-400 underline">Lock</button>
-		  </div>
-		</div>
-
-		<!-- CUSTOM RECEIVER QR UPLOAD FOR ADMIN -->
-		<div class="p-2.5 rounded-xl bg-zinc-900/70 border border-zinc-800 flex items-center justify-between gap-2">
-		  <div class="text-[10px] text-zinc-300 truncate">
-			<span class="font-semibold block">QR รับเงินของระบบ</span>
-			<span id="pope-admin-qr-status" class="text-zinc-500 font-mono">ใช้ QR อัตโนมัติของระบบ</span>
-		  </div>
-		  <div class="flex items-center gap-1.5 flex-shrink-0">
-			<label class="px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white text-[10px] font-semibold cursor-pointer border border-zinc-700">
-			  อัปโหลด QR
-			  <input type="file" accept="*/*" class="hidden" onchange="handleAdminQrUpload(event)">
-			</label>
-			<button id="pope-admin-qr-reset-btn" onclick="resetAdminCustomQr()" class="hidden px-2 py-1 rounded-lg bg-zinc-900 text-rose-400 text-[10px] border border-zinc-800">รีเซ็ต</button>
-		  </div>
-		</div>
-
-		<div class="text-[10px] text-zinc-400 uppercase font-bold">คิวตรวจสลิปเติม P1</div>
-		<div id="pope-admin-topup-list" class="space-y-2 max-h-48 overflow-y-auto no-scrollbar"></div>
-
-		<div class="text-[10px] text-zinc-400 uppercase font-bold pt-1">คิวคำขอถอน P2</div>
-		<div id="pope-admin-withdraw-list" class="space-y-2 max-h-40 overflow-y-auto no-scrollbar"></div>
-	  </div>
-	</div>
+	<!-- TAB 3: ADMIN QUEUE (DYNAMICALLY RENDERED ONLY WHEN VERIFIED VIA ADMIN BOT TOKEN) -->
+	<div id="pope-topup-admin-view" class="hidden space-y-2.5"></div>
   </div>
 </div>
 
-<!-- MY PROFILE & SETTINGS MODAL (SEPARATE USER VS ADMIN EXPERIENCE) -->
+<!-- MY PROFILE & SETTINGS MODAL -->
 <div id="pope-profile-modal" class="hidden absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3">
   <div class="bg-popePanelBg border border-zinc-800 w-full max-w-sm rounded-2xl p-4 shadow-2xl flex flex-col space-y-4 max-h-[90vh] overflow-y-auto no-scrollbar">
 	
-	<!-- HEADER WITH ROLE-AWARE TABS -->
 	<div class="flex justify-between items-center border-b border-zinc-800 pb-3">
 	  <div id="pope-profile-tabs-bar" class="flex items-center space-x-3">
-		<button id="pope-tab-profile-btn" onclick="switchPopeTab('profile')" class="text-xs font-bold text-white border-b-2 border-white pb-1 transition">โปรไฟล์ (Profile)</button>
+		<button id="pope-tab-profile-btn" onclick="switchPopeTab('profile')" class="text-xs font-bold text-white border-b-2 border-white pb-1 transition">โปรไฟล์</button>
 		<button id="pope-tab-admin-btn" onclick="switchPopeTab('admin')" class="hidden text-xs font-bold text-amber-400/80 hover:text-amber-300 border-b-2 border-transparent pb-1 transition items-center gap-1">
 		  <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-		  <span>Admin Console</span>
+		  <span>จัดการระบบ</span>
 		</button>
-		<button id="pope-tab-settings-btn" onclick="switchPopeTab('settings')" class="text-xs font-bold text-zinc-400 hover:text-white border-b-2 border-transparent pb-1 transition">ตั้งค่า (Settings)</button>
+		<button id="pope-tab-settings-btn" onclick="switchPopeTab('settings')" class="text-xs font-bold text-zinc-400 hover:text-white border-b-2 border-transparent pb-1 transition">ตั้งค่า</button>
 	  </div>
 	  <button onclick="closePopeProfileModal()" class="text-zinc-400 hover:text-white transition p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
 	</div>
 
-	<!-- VIEW 1: PERSONAL PROFILE VIEW (USER & ADMIN OWN PROFILE) -->
+	<!-- VIEW 1: PERSONAL PROFILE VIEW -->
 	<div id="pope-profile-tab-content" class="space-y-4">
 	  <div class="flex flex-col items-center text-center p-4 bg-zinc-900/60 rounded-xl border border-zinc-800 relative">
 		<div class="relative mb-2">
@@ -387,37 +327,27 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 		</div>
 
 		<h2 id="pope-card-name" class="font-bold text-sm text-white flex items-center justify-center gap-1">
-		  <span>Pope Creator</span>
+		  <span>Pope Member</span>
 		  <span id="pope-card-verified-badge" class="hidden">
 			<i data-lucide="check-circle-2" class="w-4 h-4 text-blue-400 fill-blue-500/20"></i>
 		  </span>
 		</h2>
-		<p id="pope-card-handle" class="text-xs font-mono text-zinc-400 mb-1">@pope_creator</p>
+		<p id="pope-card-handle" class="text-xs font-mono text-zinc-400 mb-1">@pope_member</p>
 
-		<!-- ACCOUNT ROLE PILL (USER VS ADMIN) -->
-		<div id="pope-account-role-pill" class="mb-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider border bg-zinc-800 text-zinc-300 border-zinc-700">
-		  USER ACCOUNT
-		</div>
-
-		<div id="pope-tg-linked-badge" class="hidden mb-1 px-2 py-0.5 rounded-full bg-sky-950/60 border border-sky-500/30 text-[9px] font-mono text-sky-300"></div>
-		
-		<!-- SUBSCRIPTION STATUS BADGE -->
 		<div id="pope-subscription-badge" class="my-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 border"></div>
+		<p id="pope-card-bio" class="text-xs text-zinc-300 leading-relaxed max-w-xs mt-1"></p>
 
-		<p id="pope-card-bio" class="text-xs text-zinc-300 leading-relaxed max-w-xs mt-1">POPE Developer & Creative Creator 🚀 | Building dark mode UI & interactive web components on POPE System.</p>
-
-		<!-- STATS COUNTER -->
 		<div class="grid grid-cols-4 gap-2 w-full mt-4 pt-3 border-t border-zinc-800">
 		  <div class="flex flex-col items-center">
 			<span id="pope-stat-posts-count" class="font-bold text-sm text-white">0</span>
 			<span class="text-[9px] text-zinc-500 uppercase font-semibold">Posts</span>
 		  </div>
 		  <div class="flex flex-col items-center">
-			<span id="pope-stat-followers-count" class="font-bold text-sm text-white">1.2K</span>
+			<span id="pope-stat-followers-count" class="font-bold text-sm text-white">0</span>
 			<span class="text-[9px] text-zinc-500 uppercase font-semibold">Followers</span>
 		  </div>
 		  <div class="flex flex-col items-center">
-			<span id="pope-stat-following-count" class="font-bold text-sm text-white">348</span>
+			<span id="pope-stat-following-count" class="font-bold text-sm text-white">0</span>
 			<span class="text-[9px] text-zinc-500 uppercase font-semibold">Following</span>
 		  </div>
 		  <div class="flex flex-col items-center">
@@ -427,35 +357,35 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 		</div>
 	  </div>
 
-	  <!-- DUAL POINTS WALLET CARD (TYPE 1 TOP-UP VS TYPE 2 EARNED/WITHDRAWABLE) -->
+	  <!-- DUAL POINTS WALLET CARD -->
 	  <div class="p-3 bg-zinc-900/80 border border-zinc-800 rounded-xl space-y-2.5">
 		<div class="flex items-center justify-between">
-		  <span class="text-[10px] text-zinc-400 uppercase font-semibold">กระเป๋า Point 2 แบบ (POPE Wallet)</span>
+		  <span class="text-[10px] text-zinc-400 uppercase font-semibold">กระเป๋า Point ของฉัน</span>
 		  <span id="pope-wallet-balance" class="text-[10px] font-mono text-zinc-400">รวม 0 Points</span>
 		</div>
 
 		<div class="grid grid-cols-2 gap-2">
-		  <!-- POINT TYPE 1: TOP-UP (NON-WITHDRAWABLE) -->
+		  <!-- POINT TYPE 1: TOP-UP -->
 		  <div class="p-2.5 rounded-xl bg-zinc-950/90 border border-yellow-500/25 space-y-1.5">
 			<div class="flex items-center justify-between">
-			  <span class="text-[10px] font-bold text-yellow-400">แบบที่ 1 · เติม</span>
-			  <span class="text-[9px] font-mono text-zinc-500">ถอนไม่ได้</span>
+			  <span class="text-[10px] font-bold text-yellow-400">Point เติม</span>
+			  <span class="text-[9px] font-mono text-zinc-500">ใช้จ่าย</span>
 			</div>
 			<div id="pope-wallet-topup-balance" class="text-sm font-bold font-mono text-white">0p</div>
-			<div class="text-[9px] text-zinc-500">ใช้จ่ายทุกอย่างในระบบ</div>
+			<div class="text-[9px] text-zinc-500">ส่งของขวัญ · Mix · สมาชิก</div>
 			<button onclick="topUpPopePoints()" class="w-full py-1.5 bg-yellow-400 hover:bg-yellow-300 text-black text-[10px] font-bold rounded-lg transition active:scale-95 flex items-center justify-center gap-1">
 			  <i data-lucide="qr-code" class="w-3 h-3"></i> เติม Point
 			</button>
 		  </div>
 
-		  <!-- POINT TYPE 2: EARNED FROM OTHERS (WITHDRAWABLE) -->
+		  <!-- POINT TYPE 2: EARNED FROM OTHERS -->
 		  <div class="p-2.5 rounded-xl bg-zinc-950/90 border border-emerald-500/25 space-y-1.5">
 			<div class="flex items-center justify-between">
-			  <span class="text-[10px] font-bold text-emerald-400">แบบที่ 2 · ได้มา</span>
-			  <span class="text-[9px] font-mono text-emerald-400/90">ถอนได้</span>
+			  <span class="text-[10px] font-bold text-emerald-400">Point ถอนได้</span>
+			  <span class="text-[9px] font-mono text-emerald-400/90">รับจากผู้อื่น</span>
 			</div>
 			<div id="pope-wallet-earned-balance" class="text-sm font-bold font-mono text-emerald-400">0p</div>
-			<div class="text-[9px] text-zinc-500">จากคนอื่นจ่ายให้เรา</div>
+			<div class="text-[9px] text-zinc-500">จากคนอื่นจ่ายให้คุณ</div>
 			<button onclick="openWithdrawModal()" class="w-full py-1.5 bg-emerald-500 hover:bg-emerald-400 text-black text-[10px] font-bold rounded-lg transition active:scale-95 flex items-center justify-center gap-1">
 			  <i data-lucide="arrow-up-right" class="w-3 h-3"></i> ถอน Point
 			</button>
@@ -470,7 +400,7 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 		<div class="flex items-center gap-2">
 		  <i data-lucide="calendar-check" class="w-4 h-4 text-emerald-400"></i>
 		  <div>
-			<div class="text-[10px] text-zinc-400 uppercase font-semibold">Daily Check-in (+Point แบบที่ 1)</div>
+			<div class="text-[10px] text-zinc-400 uppercase font-semibold">เช็กอินรายวัน (+Point เติม)</div>
 			<div id="pope-checkin-status" class="text-xs text-white font-medium">Streak: 0 days</div>
 		  </div>
 		</div>
@@ -489,10 +419,8 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 		</button>
 	  </div>
 
-	  <!-- MY USAGE ANALYTICS CARD -->
 	  <div id="pope-my-analytics-container"></div>
 
-	  <!-- PROFILE CONTENT TABS -->
 	  <div>
 		<div class="flex gap-1 mb-2 bg-zinc-900 p-1 rounded-xl border border-zinc-800">
 		  <button id="pope-pctab-posts" onclick="switchProfileContentTab('posts')" class="flex-1 py-1.5 rounded-lg text-[10px] font-bold bg-white text-black">Posts</button>
@@ -504,71 +432,18 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 	  </div>
 	</div>
 
-	<!-- VIEW 2: DEDICATED ADMIN PROFILE & CONSOLE (ADMIN ONLY) -->
-	<div id="pope-admin-tab-content" class="hidden space-y-3.5">
-	  <div class="p-3.5 rounded-2xl bg-gradient-to-r from-amber-950/50 via-zinc-900 to-zinc-900 border border-amber-500/30 space-y-2">
-		<div class="flex items-center justify-between">
-		  <div class="flex items-center gap-2">
-			<i data-lucide="shield-check" class="w-4 h-4 text-amber-400"></i>
-			<div>
-			  <div class="text-xs font-bold text-white">Admin Profile Console</div>
-			  <div id="pope-admin-console-identity" class="text-[10px] text-amber-300/90 font-mono">@pope_creator · Full Moderation & Slip Ops</div>
-			</div>
-		  </div>
-		  <span class="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-[9px] font-mono font-bold">ADMIN</span>
-		</div>
-	  </div>
-
-	  <!-- SYSTEM-WIDE ADMIN METRICS -->
-	  <div class="grid grid-cols-2 gap-2">
-		<div class="p-3 rounded-xl bg-zinc-900/80 border border-zinc-800">
-		  <div class="text-[10px] text-zinc-400 uppercase font-semibold">Total Users</div>
-		  <div id="pope-admin-metric-users" class="text-base font-bold font-mono text-white mt-0.5">0</div>
-		</div>
-		<div class="p-3 rounded-xl bg-zinc-900/80 border border-zinc-800">
-		  <div class="text-[10px] text-zinc-400 uppercase font-semibold">Pending Slips & ถอน</div>
-		  <div id="pope-admin-metric-pending" class="text-base font-bold font-mono text-amber-400 mt-0.5">0</div>
-		</div>
-		<div class="p-3 rounded-xl bg-zinc-900/80 border border-zinc-800">
-		  <div class="text-[10px] text-zinc-400 uppercase font-semibold">P1 เติมในระบบ</div>
-		  <div id="pope-admin-metric-posts" class="text-base font-bold font-mono text-yellow-400 mt-0.5">0p</div>
-		</div>
-		<div class="p-3 rounded-xl bg-zinc-900/80 border border-zinc-800">
-		  <div class="text-[10px] text-zinc-400 uppercase font-semibold">P2 ถอนได้ในระบบ</div>
-		  <div id="pope-admin-metric-points" class="text-base font-bold font-mono text-emerald-400 mt-0.5">0p</div>
-		</div>
-	  </div>
-
-	  <!-- ADMIN QUICK ACTIONS -->
-	  <div class="grid grid-cols-2 gap-2">
-		<button onclick="openAdminSlipQueueDirectly()" class="p-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-black text-xs font-bold flex items-center justify-center gap-1.5 transition">
-		  <i data-lucide="file-check-2" class="w-4 h-4"></i>
-		  <span>ตรวจสลิป & ถอน</span>
-		</button>
-		<button onclick="openPopeLeaderboard()" class="p-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white border border-zinc-700 text-xs font-bold flex items-center justify-center gap-1.5 transition">
-		  <i data-lucide="users" class="w-4 h-4 text-sky-400"></i>
-		  <span>ดูอันดับผู้ใช้</span>
-		</button>
-	  </div>
-
-	  <!-- DIRECTORY OF USERS FOR ADMIN INSPECTION -->
-	  <div class="space-y-1.5">
-		<div class="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">รายชื่อบัญชีในระบบ (P1 เติม / P2 ถอนได้)</div>
-		<div id="pope-admin-users-directory" class="space-y-1.5 max-h-48 overflow-y-auto no-scrollbar"></div>
-	  </div>
-	</div>
+	<!-- VIEW 2: ADMIN CONSOLE (DYNAMICALLY POPULATED ONLY FOR VERIFIED ADMIN) -->
+	<div id="pope-admin-tab-content" class="hidden space-y-3.5"></div>
 
 	<!-- VIEW 3: SETTINGS VIEW -->
 	<div id="pope-settings-tab-content" class="hidden space-y-3.5">
-	  
-	  <!-- MONTHLY SUBSCRIPTION TOGGLE (VERIFIED BADGE) -->
 	  <div class="p-3.5 bg-gradient-to-r from-blue-950/40 via-zinc-900 to-zinc-900 rounded-xl border border-blue-500/30 space-y-2">
 		<div class="flex items-center justify-between">
 		  <div class="flex items-center space-x-2">
 			<i data-lucide="badge-check" class="w-5 h-5 text-blue-400"></i>
 			<div>
 			  <span class="text-xs font-bold text-white block">สมัครสมาชิกรายเดือน (POPE Monthly)</span>
-			  <span class="text-[10px] text-zinc-400 block">รับเครื่องหมายยืนยันตัวตน (Verified Badge) · ใช้ 50 Points</span>
+			  <span class="text-[10px] text-zinc-400 block">รับเครื่องหมาย Verified Badge · ใช้ 50 Points</span>
 			</div>
 		  </div>
 		  <span class="text-xs font-bold text-blue-400 font-mono">50p / ฿99</span>
@@ -577,91 +452,76 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 	  </div>
 
 	  <div class="space-y-2.5">
-		<label class="text-[11px] text-zinc-400 font-semibold block uppercase tracking-wider">แก้ไขข้อมูลส่วนตัว (POPE Account)</label>
-		
+		<label class="text-[11px] text-zinc-400 font-semibold block uppercase tracking-wider">แก้ไขข้อมูลส่วนตัว</label>
 		<div>
-		  <span class="text-[10px] text-zinc-400 mb-1 block">ชื่อที่แสดง (Display Name)</span>
-		  <input id="pope-setting-name-input" type="text" value="Pope Creator" class="w-full bg-zinc-900 text-white text-xs rounded-xl px-3 py-2 border border-zinc-800 focus:outline-none focus:ring-1 focus:ring-white">
+		  <span class="text-[10px] text-zinc-400 mb-1 block">ชื่อที่แสดง</span>
+		  <input id="pope-setting-name-input" type="text" class="w-full bg-zinc-900 text-white text-xs rounded-xl px-3 py-2 border border-zinc-800 focus:outline-none focus:ring-1 focus:ring-white">
 		</div>
-
 		<div>
-		  <span class="text-[10px] text-zinc-400 mb-1 block">ชื่อผู้ใช้ (POPE Username)</span>
-		  <input id="pope-setting-handle-input" type="text" value="pope_creator" class="w-full bg-zinc-900 text-white text-xs rounded-xl px-3 py-2 border border-zinc-800 focus:outline-none focus:ring-1 focus:ring-white font-mono">
+		  <span class="text-[10px] text-zinc-400 mb-1 block">ชื่อผู้ใช้ (Username)</span>
+		  <input id="pope-setting-handle-input" type="text" class="w-full bg-zinc-900 text-white text-xs rounded-xl px-3 py-2 border border-zinc-800 focus:outline-none focus:ring-1 focus:ring-white font-mono">
 		</div>
-
 		<div>
 		  <span class="text-[10px] text-zinc-400 mb-1 block">คำอธิบายตัวเอง (Bio)</span>
-		  <textarea id="pope-setting-bio-input" rows="2" class="w-full bg-zinc-900 text-white text-xs rounded-xl p-2.5 border border-zinc-800 focus:outline-none focus:ring-1 focus:ring-white resize-none">POPE Developer & Creative Creator 🚀 | Building dark mode UI & interactive web components on POPE System.</textarea>
+		  <textarea id="pope-setting-bio-input" rows="2" class="w-full bg-zinc-900 text-white text-xs rounded-xl p-2.5 border border-zinc-800 focus:outline-none focus:ring-1 focus:ring-white resize-none"></textarea>
 		</div>
-
 		<div>
 		  <div class="flex items-center justify-between mb-1">
-			<span class="text-[10px] text-zinc-400">รูปโปรไฟล์ (Avatar URL หรืออัปโหลดไฟล์)</span>
+			<span class="text-[10px] text-zinc-400">รูปโปรไฟล์</span>
 			<label class="text-[10px] text-emerald-400 hover:underline cursor-pointer font-semibold">
 			  อัปโหลดไฟล์
 			  <input type="file" accept="*/*" class="hidden" onchange="handleAvatarFileUpload(event)">
 			</label>
 		  </div>
-		  <input id="pope-setting-avatar-input" type="text" value="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" class="w-full bg-zinc-900 text-white text-xs rounded-xl px-3 py-2 border border-zinc-800 focus:outline-none focus:ring-1 focus:ring-white font-mono">
+		  <input id="pope-setting-avatar-input" type="text" class="w-full bg-zinc-900 text-white text-xs rounded-xl px-3 py-2 border border-zinc-800 focus:outline-none focus:ring-1 focus:ring-white font-mono">
 		</div>
 	  </div>
 
-	  <!-- PREFERENCES TOGGLES -->
 	  <div class="pt-2 border-t border-zinc-800 space-y-2">
-		<label class="text-[11px] text-zinc-400 font-semibold block uppercase tracking-wider">ตั้งค่า POPE & Telegram Bot</label>
-		
+		<label class="text-[11px] text-zinc-400 font-semibold block uppercase tracking-wider">ตั้งค่าทั่วไป</label>
 		<div class="flex items-center justify-between p-2.5 bg-zinc-900/60 rounded-xl border border-zinc-800">
 		  <div class="flex items-center space-x-2">
 			<i data-lucide="bell" class="w-4 h-4 text-zinc-400"></i>
-			<span class="text-xs text-zinc-200">การแจ้งเตือน (App + Telegram Bot)</span>
+			<span class="text-xs text-zinc-200">การแจ้งเตือน</span>
 		  </div>
 		  <input id="pope-setting-notif-toggle" type="checkbox" checked onchange="togglePopePreference('notifications', this.checked)" class="w-4 h-4 accent-white rounded cursor-pointer">
 		</div>
-
 		<div class="flex items-center justify-between p-2.5 bg-zinc-900/60 rounded-xl border border-zinc-800">
 		  <div class="flex items-center space-x-2">
 			<i data-lucide="volume-2" class="w-4 h-4 text-zinc-400"></i>
-			<span class="text-xs text-zinc-200">เสียง & Haptic Feedback</span>
+			<span class="text-xs text-zinc-200">เสียง & การสั่น</span>
 		  </div>
 		  <input id="pope-setting-sound-toggle" type="checkbox" checked onchange="togglePopePreference('sound', this.checked)" class="w-4 h-4 accent-white rounded cursor-pointer">
-		</div>
-
-		<div class="p-2.5 bg-zinc-900/60 rounded-xl border border-zinc-800 space-y-1.5">
-		  <span class="text-[10px] text-zinc-400 block">Telegram Bot Username (เช่น @PopeOfficialBot)</span>
-		  <input id="pope-setting-bot-username-input" type="text" placeholder="@PopeOfficialBot" oninput="updateTelegramBotConfig(this.value)" class="w-full bg-black text-white text-xs rounded-lg px-2.5 py-1.5 border border-zinc-800 focus:outline-none focus:ring-1 focus:ring-sky-400 font-mono">
 		</div>
 	  </div>
 
 	  <button onclick="savePopeProfileSettings()" class="w-full bg-white hover:bg-zinc-200 text-black font-bold py-2.5 rounded-xl transition shadow-lg text-xs tracking-wider uppercase active:scale-[0.99] mt-2">
-		บันทึกการเปลี่ยนแปลง (Save POPE Settings)
+		บันทึกการเปลี่ยนแปลง
 	  </button>
 
 	  <button onclick="popeLogout()" class="w-full bg-zinc-800 hover:bg-zinc-700 text-red-400 font-bold py-2.5 rounded-xl transition shadow-lg text-xs tracking-wider uppercase active:scale-[0.99] flex items-center justify-center gap-2">
-		<i data-lucide="log-out" class="w-3.5 h-3.5"></i> ออกจากระบบ (Logout)
+		<i data-lucide="log-out" class="w-3.5 h-3.5"></i> ออกจากระบบ
 	  </button>
 
 	  <button onclick="resetPopeData()" class="w-full bg-zinc-900 hover:bg-red-950/40 text-zinc-500 hover:text-red-400 font-medium py-2 rounded-xl transition text-[10px] tracking-wider uppercase active:scale-[0.99] flex items-center justify-center gap-2 border border-zinc-800">
-		<i data-lucide="trash-2" class="w-3 h-3"></i> Reset All Data (Demo)
+		<i data-lucide="trash-2" class="w-3 h-3"></i> Reset Data
 	  </button>
 	</div>
 
   </div>
 </div>
 
-<!-- PUBLIC USER PROFILE MODAL (VIEW OTHER USERS) -->
+<!-- PUBLIC USER PROFILE MODAL -->
 <div id="pope-user-view-modal" class="hidden absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3">
   <div class="bg-popePanelBg border border-zinc-800 w-full max-w-sm rounded-2xl p-4 shadow-2xl flex flex-col space-y-4 max-h-[90vh] overflow-y-auto no-scrollbar">
-	
-	<!-- HEADER -->
 	<div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
 	  <div class="flex items-center space-x-2">
 		<i data-lucide="user" class="w-4 h-4 text-zinc-400"></i>
-		<span class="text-xs font-bold text-white uppercase tracking-wider">โปรไฟล์ผู้ใช้ (User Profile)</span>
+		<span class="text-xs font-bold text-white uppercase tracking-wider">โปรไฟล์ผู้ใช้</span>
 	  </div>
 	  <button onclick="closePopeUserViewModal()" class="text-zinc-400 hover:text-white transition p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
 	</div>
 
-	<!-- USER DETAILS CARD -->
 	<div class="flex flex-col items-center text-center p-4 bg-zinc-900/60 rounded-xl border border-zinc-800 relative">
 	  <img id="pope-other-card-avatar" src="" class="w-16 h-16 rounded-full object-cover border-2 border-zinc-700 shadow-xl mb-2" alt="User Avatar">
 	  <h2 id="pope-other-card-name" class="font-bold text-sm text-white flex items-center justify-center gap-1">
@@ -671,21 +531,14 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 		</span>
 	  </h2>
 	  <p id="pope-other-card-handle" class="text-xs font-mono text-zinc-400 mb-2">@user</p>
-	  <p id="pope-other-card-bio" class="text-xs text-zinc-300 leading-relaxed max-w-xs mb-3">No bio available</p>
+	  <p id="pope-other-card-bio" class="text-xs text-zinc-300 leading-relaxed max-w-xs mb-3"></p>
 
 	  <div class="flex items-center gap-2">
-		<button id="pope-other-follow-btn" onclick="togglePopeOtherUserFollow()" class="px-5 py-1.5 rounded-full text-xs font-bold bg-white text-black hover:bg-zinc-200 transition shadow">
-		  Follow
-		</button>
-		<button onclick="reportPopeUser()" class="px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-800 text-zinc-300 border border-zinc-700 hover:bg-zinc-700 transition" title="Report">
-		  <i data-lucide="flag" class="w-3.5 h-3.5"></i>
-		</button>
-		<button onclick="blockPopeUser()" class="px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-800 text-red-400 border border-zinc-700 hover:bg-zinc-700 transition" title="Block">
-		  <i data-lucide="ban" class="w-3.5 h-3.5"></i>
-		</button>
+		<button id="pope-other-follow-btn" onclick="togglePopeOtherUserFollow()" class="px-5 py-1.5 rounded-full text-xs font-bold bg-white text-black hover:bg-zinc-200 transition shadow">Follow</button>
+		<button onclick="reportPopeUser()" class="px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-800 text-zinc-300 border border-zinc-700 hover:bg-zinc-700 transition" title="Report"><i data-lucide="flag" class="w-3.5 h-3.5"></i></button>
+		<button onclick="blockPopeUser()" class="px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-800 text-red-400 border border-zinc-700 hover:bg-zinc-700 transition" title="Block"><i data-lucide="ban" class="w-3.5 h-3.5"></i></button>
 	  </div>
 
-	  <!-- STATS COUNTER -->
 	  <div class="grid grid-cols-4 gap-2 w-full mt-4 pt-3 border-t border-zinc-800">
 		<div class="flex flex-col items-center">
 		  <span id="pope-other-stat-posts" class="font-bold text-sm text-white">0</span>
@@ -706,18 +559,15 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 	  </div>
 	</div>
 
-	<!-- USAGE ANALYTICS & ACTIVITY STATS -->
 	<div id="pope-other-analytics-container"></div>
 
-	<!-- OTHER USER'S POSTS -->
 	<div>
 	  <div class="flex justify-between items-center mb-2 px-1">
-		<span class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider">โพสต์ของผู้ใช้ (User Posts)</span>
+		<span class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider">โพสต์ของผู้ใช้</span>
 		<span id="pope-other-posts-badge" class="text-[10px] bg-zinc-800 text-zinc-300 px-2 py-0.5 rounded-full font-mono">0</span>
 	  </div>
 	  <div id="pope-other-posts-list" class="space-y-2 max-h-44 overflow-y-auto no-scrollbar pr-1"></div>
 	</div>
-
   </div>
 </div>
 
@@ -731,17 +581,14 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 	  </div>
 	  <button onclick="closePopePostDetailModal()" class="text-zinc-400 hover:text-white transition p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
 	</div>
-	
 	<div id="pope-inspect-media-box" class="w-full h-44 bg-black rounded-xl border border-zinc-800 overflow-hidden relative flex items-center justify-center"></div>
 	<p id="pope-inspect-caption" class="text-xs text-zinc-200 leading-relaxed font-normal"></p>
-
 	<div class="flex items-center justify-between text-[11px] text-zinc-400 border-t border-zinc-800 pt-2 font-mono">
-	  <span id="pope-inspect-likes-count">❤️ 0 Likes</span>
-	  <span id="pope-inspect-mix-count">✨ 0 Mix</span>
+	  <span id="pope-inspect-likes-count">❤️ 0</span>
+	  <span id="pope-inspect-mix-count">✨ 0</span>
 	  <span id="pope-inspect-gifts-count">🎁 0p</span>
 	  <span id="pope-inspect-comments-count">💬 0</span>
 	</div>
-
 	<div id="pope-inspect-comments-list" class="space-y-2 max-h-28 overflow-y-auto no-scrollbar border-t border-zinc-800/80 pt-2"></div>
 	<form onsubmit="addInspectComment(event)" class="flex items-center gap-1.5 pt-1">
 	  <input id="pope-inspect-comment-input" type="text" placeholder="เขียนคอมเมนต์..." class="flex-1 bg-zinc-900 text-white border border-zinc-800 rounded-full px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-white">
@@ -758,7 +605,6 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 <button onclick="closePopeCreateModal()" class="text-zinc-400 hover:text-white transition"><i data-lucide="x" class="w-5 h-5"></i></button>
 </div>
 
-<!-- TYPE SELECTOR TABS -->
 <div class="grid grid-cols-4 gap-1 bg-zinc-900 p-1 rounded-xl text-[11px] font-medium border border-zinc-800">
 <button id="pope-tab-btn-code" onclick="setPopePostType('code')" class="py-1.5 rounded-lg bg-white text-black flex flex-col items-center gap-0.5 transition font-semibold"><i data-lucide="code" class="w-3.5 h-3.5"></i><span>Code</span></button>
 <button id="pope-tab-btn-image" onclick="setPopePostType('image')" class="py-1.5 rounded-lg text-zinc-400 flex flex-col items-center gap-0.5 transition hover:text-white"><i data-lucide="image" class="w-3.5 h-3.5"></i><span>Image</span></button>
@@ -766,16 +612,15 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 <button id="pope-tab-btn-url" onclick="setPopePostType('url')" class="py-1.5 rounded-lg text-zinc-400 flex flex-col items-center gap-0.5 transition hover:text-white"><i data-lucide="link" class="w-3.5 h-3.5"></i><span>Link</span></button>
 </div>
 
-<!-- INPUT AREAS -->
 <div id="pope-code-input-area">
 <label class="text-[11px] text-zinc-400 block mb-1 font-medium">Paste HTML / CSS / JS code here:</label>
-<textarea id="pope-code-input" rows="5" placeholder="<!DOCTYPE html>&#10;<html>&#10;<body>&#10;  <h1>Hello POPE System</h1>&#10;</body>&#10;</html>" class="w-full bg-popeCodeBg text-zinc-100 font-mono text-xs rounded-xl p-3 border border-zinc-700/70 focus:outline-none focus:ring-1 focus:ring-white resize-none"></textarea>
+<textarea id="pope-code-input" rows="5" placeholder="<!DOCTYPE html>&#10;<html>&#10;<body>&#10;  <h1>Hello POPE</h1>&#10;</body>&#10;</html>" class="w-full bg-popeCodeBg text-zinc-100 font-mono text-xs rounded-xl p-3 border border-zinc-700/70 focus:outline-none focus:ring-1 focus:ring-white resize-none"></textarea>
 </div>
 
 <div id="pope-image-input-area" class="hidden">
 <div class="w-full h-24 rounded-xl gradient-bg-card flex flex-col items-center justify-center border border-zinc-700/70 relative cursor-pointer hover:border-zinc-500 transition">
 <i data-lucide="upload-cloud" class="w-6 h-6 text-white mb-1"></i>
-<span class="text-[11px] text-zinc-300 font-medium">Upload Any File(s) or Image(s)</span>
+<span class="text-[11px] text-zinc-300 font-medium">Upload Image(s) or File(s)</span>
 <input id="pope-image-file-input" type="file" accept="*/*" multiple class="absolute inset-0 opacity-0 cursor-pointer" onchange="handlePopeFileUpload(event,'image')">
 </div>
 </div>
@@ -783,7 +628,7 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 <div id="pope-video-input-area" class="hidden">
 <div class="w-full h-24 rounded-xl gradient-bg-card flex flex-col items-center justify-center border border-zinc-700/70 relative cursor-pointer hover:border-zinc-500 transition">
 <i data-lucide="file-up" class="w-6 h-6 text-white mb-1"></i>
-<span class="text-[11px] text-zinc-300 font-medium">Upload Any File (Video, Audio, PDF, ZIP, etc.)</span>
+<span class="text-[11px] text-zinc-300 font-medium">Upload Video / Audio / File</span>
 <input id="pope-video-file-input" type="file" accept="*/*" multiple class="absolute inset-0 opacity-0 cursor-pointer" onchange="handlePopeFileUpload(event,'video')">
 </div>
 </div>
@@ -796,31 +641,29 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 </div>
 </div>
 
-<!-- LIVE PREVIEW AREA -->
 <div class="border-t border-zinc-800 pt-2.5">
 <div class="flex justify-between items-center mb-1.5">
 <span class="text-[11px] font-semibold text-zinc-400 flex items-center gap-1.5">
-<i data-lucide="eye" class="w-3.5 h-3.5 text-zinc-300"></i> POPE Preview
+<i data-lucide="eye" class="w-3.5 h-3.5 text-zinc-300"></i> Preview
 </span>
 <button onclick="clearPopePreview()" class="text-[11px] text-zinc-500 hover:text-white transition">Clear</button>
 </div>
 <div id="pope-live-preview" class="w-full h-28 bg-black rounded-xl border border-zinc-800 overflow-hidden relative">
-<div class="w-full h-full flex items-center justify-center text-xs text-zinc-600 font-medium">No POPE preview data</div>
+<div class="w-full h-full flex items-center justify-center text-xs text-zinc-600 font-medium">No preview</div>
 </div>
 <div id="pope-media-meta-info" class="text-[10px] text-zinc-500 font-mono mt-1 truncate"></div>
 </div>
 
-<!-- POPEmix PERMISSION SETTINGS BY CREATOR -->
 <div class="p-3 bg-zinc-900/60 rounded-xl border border-zinc-800 space-y-2">
   <div class="flex items-center justify-between">
 	<div class="flex items-center space-x-2">
 	  <i data-lucide="sparkles" class="w-4 h-4 text-purple-400"></i>
-	  <span class="text-xs text-zinc-200 font-medium">อนุญาตให้ POPEmix (Allow Remix)</span>
+	  <span class="text-xs text-zinc-200 font-medium">อนุญาตให้ POPEmix</span>
 	</div>
 	<input id="pope-mix-allow-toggle" type="checkbox" checked onchange="toggleMixPriceInput()" class="w-4 h-4 accent-white rounded cursor-pointer">
   </div>
   <div id="pope-mix-price-wrap" class="flex items-center justify-between pt-1 border-t border-zinc-800">
-	<span class="text-[10px] text-zinc-400">ราคาค่าธรรมเนียม Mix (เข้า P2 ผู้สร้าง)</span>
+	<span class="text-[10px] text-zinc-400">ค่าธรรมเนียม Mix (เข้าผู้สร้าง)</span>
 	<div class="flex items-center space-x-1 bg-black px-2 py-1 rounded-lg border border-zinc-800">
 	  <i data-lucide="coins" class="w-3 h-3 text-yellow-400"></i>
 	  <input id="pope-mix-price-input" type="number" min="0" value="10" class="w-16 bg-transparent text-xs text-white text-right font-mono focus:outline-none">
@@ -828,7 +671,6 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
   </div>
 </div>
 
-<!-- CAPTION INPUT -->
 <textarea id="pope-caption-input" rows="2" placeholder="Write a POPE caption... #POPE #Code" class="w-full bg-zinc-900 text-white text-xs rounded-xl p-3 focus:outline-none focus:ring-1 focus:ring-white border border-zinc-700/70 resize-none"></textarea>
 
 <div class="grid grid-cols-3 gap-2">
@@ -843,13 +685,13 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 <!-- POPE COMMENTS DRAWER -->
 <div id="pope-comment-drawer" class="absolute inset-x-0 bottom-0 h-[65%] bg-popePanelBg rounded-t-3xl z-50 transform translate-y-full drawer-transition flex flex-col border-t border-zinc-800 shadow-2xl">
 <div class="p-3.5 border-b border-zinc-800 flex justify-between items-center">
-<span id="pope-comment-count-header" class="text-xs font-bold text-zinc-200 uppercase tracking-wider">POPE Comments (0)</span>
+<span id="pope-comment-count-header" class="text-xs font-bold text-zinc-200 uppercase tracking-wider">Comments (0)</span>
 <button onclick="togglePopeCommentDrawer(false)" class="text-zinc-400 hover:text-white p-1"><i data-lucide="x" class="w-4 h-4"></i></button>
 </div>
 <div id="pope-comments-list" class="flex-1 overflow-y-auto p-4 space-y-3.5 no-scrollbar"></div>
 <form onsubmit="addPopeComment(event)" class="p-3 bg-black border-t border-zinc-800 flex items-center space-x-2 pb-safe">
 <img id="pope-comment-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" class="w-7 h-7 rounded-full object-cover border border-zinc-700" alt="POPE Profile">
-<input id="pope-comment-input" type="text" placeholder="Add a POPE comment..." class="flex-1 bg-zinc-900 text-white border border-zinc-800 rounded-full px-3.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-white">
+<input id="pope-comment-input" type="text" placeholder="เขียนคอมเมนต์..." class="flex-1 bg-zinc-900 text-white border border-zinc-800 rounded-full px-3.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-white">
 <button type="submit" class="text-white font-semibold text-xs px-2.5 py-1.5 hover:opacity-80 transition">Post</button>
 </form>
 </div>
@@ -861,13 +703,13 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 	<div class="flex items-center gap-2">
 	  <div class="flex-1 flex items-center bg-zinc-900 rounded-xl px-3 py-2 border border-zinc-700">
 		<i data-lucide="search" class="w-4 h-4 text-zinc-400 mr-2"></i>
-		<input id="pope-search-input" type="text" placeholder="Search users, captions, #tags..." class="bg-transparent text-white text-xs w-full focus:outline-none" oninput="runPopeSearch()" onkeydown="if(event.key==='Enter') applySearchToFeed()">
+		<input id="pope-search-input" type="text" placeholder="ค้นหาผู้ใช้, โพสต์, #แท็ก..." class="bg-transparent text-white text-xs w-full focus:outline-none" oninput="runPopeSearch()" onkeydown="if(event.key==='Enter') applySearchToFeed()">
 	  </div>
 	  <button onclick="applySearchToFeed()" class="px-2.5 py-2 rounded-xl bg-white text-black text-[11px] font-bold hover:bg-zinc-200 transition">Feed</button>
 	  <button onclick="closePopeSearchModal()" class="text-zinc-400 hover:text-white p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
 	</div>
 	<div id="pope-search-results" class="flex-1 overflow-y-auto no-scrollbar space-y-2 max-h-[60vh]">
-	  <div class="text-center text-zinc-500 text-xs py-8">Type to search...</div>
+	  <div class="text-center text-zinc-500 text-xs py-8">พิมพ์เพื่อค้นหา...</div>
 	</div>
   </div>
 </div>
@@ -894,7 +736,7 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 	</div>
 	<div class="grid grid-cols-2 gap-1 bg-zinc-900 p-1 rounded-xl text-[11px]">
 	  <button id="pope-lb-tab-creators" onclick="renderLeaderboard('creators')" class="py-1.5 rounded-lg bg-white text-black font-semibold">Top Creators</button>
-	  <button id="pope-lb-tab-earners" onclick="renderLeaderboard('earners')" class="py-1.5 rounded-lg text-zinc-400 hover:text-white">Top Earners (P2)</button>
+	  <button id="pope-lb-tab-earners" onclick="renderLeaderboard('earners')" class="py-1.5 rounded-lg text-zinc-400 hover:text-white">Top Earners</button>
 	</div>
 	<div id="pope-leaderboard-list" class="space-y-2"></div>
   </div>
@@ -907,7 +749,7 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 	  <span class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5"><i data-lucide="gift" class="w-4 h-4 text-pink-400"></i> Send Gift</span>
 	  <button onclick="closePopeGiftModal()" class="text-zinc-400 hover:text-white p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
 	</div>
-	<p class="text-[11px] text-zinc-400">ส่งของขวัญให้ผู้สร้าง (เข้าเป็น Point แบบที่ 2 · ถอนได้)</p>
+	<p class="text-[11px] text-zinc-400">ส่งของขวัญให้ผู้สร้าง</p>
 	<div class="grid grid-cols-3 gap-2">
 	  <button onclick="sendPopeGift(5)" class="py-3 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-yellow-500/50 text-center transition">
 		<div class="text-lg">🎁</div>
@@ -922,7 +764,7 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 		<div class="text-xs font-bold text-yellow-400 font-mono">50p</div>
 	  </button>
 	</div>
-	<div class="text-[10px] text-zinc-500 text-center">ใช้จ่ายได้รวม: <span id="pope-gift-balance" class="text-white font-mono">0</span>p (หัก P1 ก่อน แล้วค่อย P2)</div>
+	<div class="text-[10px] text-zinc-500 text-center">Point คงเหลือ: <span id="pope-gift-balance" class="text-white font-mono">0</span>p</div>
   </div>
 </div>
 
@@ -945,21 +787,36 @@ body { font-family: 'Inter', sans-serif; background-color: #000000; color: #ffff
 
 </div>
 
-<!-- POPE JAVASCRIPT LOGIC + TELEGRAM MINI APP BRIDGE -->
+<!-- POPE JAVASCRIPT LOGIC + TELEGRAM BOT DATA STORAGE & REALTIME CHANNEL DRIVER -->
 <script>
-// ===================== TELEGRAM MINI APP BRIDGE =====================
+// ===================== TELEGRAM BOT CONFIG & STORAGE DRIVER =====================
+const TELEGRAM_BOT_CONFIG = {
+  botToken: '9178186935:AAHdzsFIPAG1ifN74cbch9cO4NWQlzOuzDQ',
+  chatId: '-1006029280675',
+  adminPin: '9178186935'
+};
+
 const tgApp = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
 const API_BASE = window.POPE_API_BASE || '';
-let telegramBotUsername = localStorage.getItem('pope_tg_bot_username') || '';
-let backendAvailable = false;
 let reopenProfileAfterTopup = false;
+let realtimePollTimer = null;
+
+// Admin access is strictly verified via Telegram Bot Token / Admin Chat ID
+let adminSessionToken = '';
+let isVerifiedAdmin = false;
 
 function getTelegramInitData() {
   return tgApp && typeof tgApp.initData === 'string' ? tgApp.initData : '';
 }
 
-function getTelegramUser() {
-  return tgApp?.initDataUnsafe?.user || null;
+function getBotStartParam() {
+  if (tgApp?.initDataUnsafe?.start_param) return String(tgApp.initDataUnsafe.start_param).trim();
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('tgWebAppStartParam')) return params.get('tgWebAppStartParam').trim();
+  if (params.get('startapp')) return params.get('startapp').trim();
+  if (params.get('admin')) return 'admin_' + params.get('admin').trim();
+  const hashMatch = window.location.hash.match(/tgWebAppStartParam=([^&]+)/);
+  return hashMatch ? decodeURIComponent(hashMatch[1]).trim() : '';
 }
 
 function hapticImpact(style = 'light') {
@@ -976,26 +833,67 @@ function hapticNotify(type = 'success') {
   } catch (_) {}
 }
 
-function updateTelegramBotConfig(val) {
-  telegramBotUsername = String(val || '').trim().replace(/^@/, '');
-  localStorage.setItem('pope_tg_bot_username', telegramBotUsername);
+// Convert DataURL to Blob for uploading slip images directly to Telegram Bot Channel
+function dataUrlToBlob(dataUrl) {
+  const parts = dataUrl.split(',');
+  const mime = (parts[0].match(/:(.*?);/) || [])[1] || 'image/png';
+  const raw = atob(parts[1]);
+  const arr = new Uint8Array(raw.length);
+  for (let i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
+  return new Blob([arr], { type: mime });
 }
 
-function openTelegramBotLink() {
-  hapticImpact('light');
-  const botHandle = telegramBotUsername || (tgApp?.initDataUnsafe?.receiver?.username) || '';
-  if (!botHandle) {
-	showPopeToast('ตั้งค่า Telegram Bot Username ในหน้า Settings ได้เลย');
-	openPopeProfileModal();
-	switchPopeTab('settings');
-	return;
+// Direct Telegram Bot API Relay (Sends Realtime Logs, Slips & State Backup to Chat ID -1006029280675)
+async function sendTelegramBotMessage(text, slipFileObj = null) {
+  const token = TELEGRAM_BOT_CONFIG.botToken;
+  const chatId = TELEGRAM_BOT_CONFIG.chatId;
+  if (!token || !chatId) return null;
+
+  try {
+	if (slipFileObj && slipFileObj.category === 'image' && slipFileObj.url && slipFileObj.url.startsWith('data:image')) {
+	  const formData = new FormData();
+	  formData.append('chat_id', chatId);
+	  formData.append('caption', text);
+	  formData.append('parse_mode', 'HTML');
+	  formData.append('photo', dataUrlToBlob(slipFileObj.url), slipFileObj.name || 'slip.jpg');
+	  const res = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+		method: 'POST',
+		body: formData
+	  });
+	  return await res.json();
+	} else {
+	  const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+		  chat_id: chatId,
+		  text,
+		  parse_mode: 'HTML',
+		  disable_web_page_preview: true
+		})
+	  });
+	  return await res.json();
+	}
+  } catch (err) {
+	console.warn('Telegram Bot API relay warning:', err);
+	return null;
   }
-  const url = `https://t.me/${encodeURIComponent(botHandle)}`;
-  if (tgApp?.openTelegramLink) {
-	tgApp.openTelegramLink(url);
-  } else {
-	window.open(url, '_blank', 'noopener,noreferrer');
-  }
+}
+
+// Push structured realtime event to Telegram Bot chat/webhook & Bot API
+function sendActionToBot(action, payload = {}) {
+  try {
+	if (tgApp && typeof tgApp.sendData === 'function' && getTelegramInitData()) {
+	  tgApp.sendData(JSON.stringify({
+		source: 'pope_miniapp',
+		action,
+		chatId: TELEGRAM_BOT_CONFIG.chatId,
+		username: currentPopeUser?.username || null,
+		payload,
+		ts: Date.now()
+	  }));
+	}
+  } catch (_) {}
 }
 
 async function apiRequest(path, options = {}) {
@@ -1004,10 +902,12 @@ async function apiRequest(path, options = {}) {
   }
   const headers = {
 	'Content-Type': 'application/json',
+	'X-Bot-Chat-Id': TELEGRAM_BOT_CONFIG.chatId,
 	...(options.headers || {})
   };
   const initData = getTelegramInitData();
   if (initData) headers['X-Telegram-Init-Data'] = initData;
+  if (adminSessionToken) headers['X-Admin-Token'] = adminSessionToken;
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 3500);
@@ -1019,99 +919,202 @@ async function apiRequest(path, options = {}) {
 	});
 	clearTimeout(timer);
 	if (!res.ok) throw new Error(`HTTP ${res.status}`);
-	backendAvailable = true;
 	return await res.json();
   } catch (err) {
 	clearTimeout(timer);
-	backendAvailable = false;
 	throw err;
   }
 }
 
+// Realtime sync with Telegram Bot Backend & Direct Telegram Channel Notification
 async function syncStateToBotBackend(eventType, payload = {}) {
+  const userTag = currentPopeUser ? `@${escapePopeHtml(currentPopeUser.username)}` : 'Guest';
+
+  // Relay critical financial, account & moderation events directly to Telegram Chat ID (-1006029280675)
+  if (eventType === 'topup_slip_submitted') {
+	const msg = [
+	  `💰 <b>[POPE TOP-UP SLIP]</b>`,
+	  `👤 ผู้ใช้: <b>${userTag}</b>`,
+	  `🔖 REF: <code>${escapePopeHtml(payload.ref)}</code>`,
+	  `🪙 จำนวน: <b>+${payload.points} Points</b>`,
+	  payload.note ? `📝 หมายเหตุ: ${escapePopeHtml(payload.note)}` : '',
+	  `⏳ สถานะ: <b>รอตรวจสอบ (PENDING)</b>`
+	].filter(Boolean).join('\n');
+	sendTelegramBotMessage(msg, payload.slip || null);
+  } else if (eventType === 'withdraw_p2_requested') {
+	const msg = [
+	  `🏦 <b>[POPE WITHDRAW REQUEST]</b>`,
+	  `👤 ผู้ใช้: <b>${userTag}</b>`,
+	  `🔖 REF: <code>${escapePopeHtml(payload.ref)}</code>`,
+	  `💸 ยอดถอน: <b>${payload.points} Points</b>`,
+	  `💳 ปลายทาง: <code>${escapePopeHtml(payload.destination)}</code>`,
+	  `⏳ สถานะ: <b>รอดำเนินการ (PENDING)</b>`
+	].join('\n');
+	sendTelegramBotMessage(msg);
+  } else if (eventType === 'topup_reviewed') {
+	const r = payload.request || {};
+	const msg = payload.approve
+	  ? `✅ <b>[APPROVED TOP-UP]</b> <code>${escapePopeHtml(r.ref)}</code> · @${escapePopeHtml(r.username)} (+${r.points}p)`
+	  : `❌ <b>[REJECTED TOP-UP]</b> <code>${escapePopeHtml(r.ref)}</code> · @${escapePopeHtml(r.username)}`;
+	sendTelegramBotMessage(msg);
+  } else if (eventType === 'withdraw_p2_reviewed') {
+	const w = payload.request || {};
+	const msg = payload.approve
+	  ? `✅ <b>[APPROVED WITHDRAW]</b> <code>${escapePopeHtml(w.ref)}</code> · @${escapePopeHtml(w.username)} (-${w.points}p)`
+	  : `↩️ <b>[REJECTED & REFUNDED WITHDRAW]</b> <code>${escapePopeHtml(w.ref)}</code> · @${escapePopeHtml(w.username)} (+${w.points}p)`;
+	sendTelegramBotMessage(msg);
+  } else if (eventType === 'user_registered') {
+	const u = payload.user || {};
+	sendTelegramBotMessage(`🆕 <b>[NEW POPE MEMBER]</b> ${escapePopeHtml(u.name)} (@${escapePopeHtml(u.username)})`);
+  } else if (eventType === 'gift_sent') {
+	sendTelegramBotMessage(`🎁 <b>[POPE GIFT]</b> ${userTag} ส่ง <b>${payload.amount}p</b> ให้ @${escapePopeHtml(payload.targetUsername)}`);
+  } else if (eventType === 'user_reported') {
+	sendTelegramBotMessage(`🚨 <b>[USER REPORT]</b> ${userTag} รายงานผู้ใช้ @${escapePopeHtml(payload.targetUsername)}`);
+  }
+
   try {
-	await apiRequest('/api/bot/sync', {
+	const res = await apiRequest('/api/bot/sync', {
 	  method: 'POST',
 	  body: JSON.stringify({
 		eventType,
+		chatId: TELEGRAM_BOT_CONFIG.chatId,
 		username: currentPopeUser?.username || null,
-		telegramId: currentPopeUser?.telegramId || getTelegramUser()?.id || null,
-		payload
+		payload,
+		ts: Date.now()
 	  })
 	});
+	if (res?.state) {
+	  applyBotCloudState(res.state);
+	}
+	return res;
+  } catch (_) {
+	return null;
+  }
+}
+
+function applyBotCloudState(cloudState) {
+  if (!cloudState || typeof cloudState !== 'object') return;
+  let changed = false;
+
+  if (Array.isArray(cloudState.registeredUsers) && cloudState.registeredUsers.length) {
+	registeredUsers = cloudState.registeredUsers.map(u => {
+	  normalizeUserPointBalances(u);
+	  if (!u.personal) u.personal = createEmptyUserPersonal();
+	  return u;
+	});
+	if (currentPopeUser) {
+	  const updatedMe = registeredUsers.find(u => u.username === currentPopeUser.username);
+	  if (updatedMe) {
+		currentPopeUser = updatedMe;
+		loadUserPersonalData(currentPopeUser);
+	  }
+	}
+	changed = true;
+  }
+
+  if (Array.isArray(cloudState.popePosts) && cloudState.popePosts.length) {
+	popePosts = cloudState.popePosts;
+	changed = true;
+  }
+
+  if (Array.isArray(cloudState.topupRequests)) {
+	topupRequests = cloudState.topupRequests;
+	changed = true;
+  }
+
+  if (Array.isArray(cloudState.withdrawRequests)) {
+	withdrawRequests = cloudState.withdrawRequests;
+	changed = true;
+  }
+
+  if (typeof cloudState.adminCustomQrUrl === 'string') {
+	adminCustomQrUrl = cloudState.adminCustomQrUrl;
+	changed = true;
+  }
+
+  if (changed) {
+	savePopeData();
+	updateBalanceUI();
+	if (currentPopeUser) {
+	  renderPopeProfileData();
+	  renderTopupLists();
+	}
+  }
+}
+
+async function pullRealtimeStateFromBot() {
+  try {
+	const res = await apiRequest('/api/bot/state', { method: 'GET' });
+	if (res?.isAdmin && res?.adminToken) {
+	  adminSessionToken = res.adminToken;
+	  isVerifiedAdmin = true;
+	  syncAdminVisibility();
+	}
+	if (res?.state) {
+	  applyBotCloudState(res.state);
+	}
   } catch (_) {}
 }
 
-async function tryTelegramAutoLogin(showFeedback = false) {
-  const tgUser = getTelegramUser();
-  const statusEl = document.getElementById('pope-tg-env-status');
+function startBotRealtimeLoop() {
+  if (realtimePollTimer) clearInterval(realtimePollTimer);
+  realtimePollTimer = setInterval(() => {
+	if (!document.hidden && currentPopeUser) {
+	  pullRealtimeStateFromBot();
+	}
+  }, 8000);
+}
 
-  if (!tgApp || !tgUser) {
-	if (statusEl) statusEl.innerText = 'Browser mode (ไม่พบ Telegram initData)';
-	if (showFeedback) showPopeToast('เปิดผ่าน Telegram Bot เพื่อเข้าสู่ระบบอัตโนมัติ');
-	return false;
+// Verify Admin exclusively via signed Admin Bot token / Bot Token prefix (never exposed to normal users)
+async function verifyAdminBotToken(botAdminToken = '') {
+  const tokenToCheck = (botAdminToken || adminSessionToken || '').trim();
+  if (!tokenToCheck) return false;
+
+  // Offline/Standalone fallback verification using the Bot's numeric ID or full Bot Token
+  if (tokenToCheck === TELEGRAM_BOT_CONFIG.adminPin || tokenToCheck === TELEGRAM_BOT_CONFIG.botToken) {
+	adminSessionToken = tokenToCheck;
+	isVerifiedAdmin = true;
+	syncAdminVisibility();
+	return true;
   }
 
-  if (statusEl) statusEl.innerText = `Detected @${tgUser.username || tgUser.id}`;
-
-  const tgUsername = (tgUser.username || `tg_${tgUser.id}`).replace(/[^a-zA-Z0-9_]/g, '_');
-  const displayName = [tgUser.first_name, tgUser.last_name].filter(Boolean).join(' ') || `TG User ${tgUser.id}`;
-  const avatarUrl = tgUser.photo_url || `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80`;
-
   try {
-	const remote = await apiRequest('/api/auth/telegram', {
+	const res = await apiRequest('/api/admin/verify-bot-token', {
 	  method: 'POST',
-	  body: JSON.stringify({ initData: getTelegramInitData(), user: tgUser })
+	  body: JSON.stringify({
+		adminToken: tokenToCheck,
+		chatId: TELEGRAM_BOT_CONFIG.chatId
+	  })
 	});
-	if (remote?.user) {
-	  currentPopeUser = normalizeUserPointBalances({ ...remote.user, telegramId: tgUser.id });
-	  if (!registeredUsers.some(u => u.username === currentPopeUser.username)) {
-		registeredUsers.push(currentPopeUser);
-	  }
-	  loadUserPersonalData(currentPopeUser);
-	  savePopeData();
-	  checkAuthStatus();
-	  if (showFeedback) showPopeToast(`เชื่อมต่อ Telegram @${currentPopeUser.username} สำเร็จ`);
+	if (res?.isAdmin) {
+	  adminSessionToken = res.adminToken || tokenToCheck;
+	  isVerifiedAdmin = true;
+	  syncAdminVisibility();
 	  return true;
 	}
   } catch (_) {}
+  return false;
+}
 
-  let existing = registeredUsers.find(u => u.telegramId === tgUser.id || u.username === tgUsername);
-  if (!existing) {
-	existing = normalizeUserPointBalances({
-	  name: displayName,
-	  username: tgUsername,
-	  role: 'user',
-	  telegramId: tgUser.id,
-	  password: '',
-	  bio: `Telegram Mini App User (@${tgUsername}) 🚀`,
-	  avatar: avatarUrl,
-	  followers: 0,
-	  following: 0,
-	  isSubscribed: false,
-	  balance: 100,
-	  earnedBalance: 0,
-	  followingList: [],
-	  personal: createEmptyUserPersonal()
+function handleBotDeepLinkParam(param) {
+  if (!param) return;
+  if (param.startsWith('admin_')) {
+	const token = param.slice('admin_'.length).trim();
+	verifyAdminBotToken(token).then(ok => {
+	  if (ok && currentPopeUser) {
+		openTopupModal('admin');
+	  }
 	});
-	registeredUsers.push(existing);
-	currentPopeUser = existing;
-	loadUserPersonalData(currentPopeUser);
-	logWalletTx('Telegram welcome bonus (P1)', 100);
-  } else {
-	existing = normalizeUserPointBalances(existing);
-	existing.role = existing.role || (existing.username === 'pope_creator' ? 'admin' : 'user');
-	existing.telegramId = tgUser.id;
-	existing.name = existing.name || displayName;
-	if (tgUser.photo_url) existing.avatar = tgUser.photo_url;
-	currentPopeUser = existing;
-	loadUserPersonalData(currentPopeUser);
+  } else if (currentPopeUser) {
+	if (param === 'topup') openTopupModal('pay');
+	else if (param === 'withdraw') openTopupModal('withdraw');
+	else if (param === 'profile') openPopeProfileModal();
+	else if (param === 'create') openPopeCreateModal();
+	else if (param.startsWith('post_')) {
+	  const pid = Number(param.replace('post_', ''));
+	  if (pid) inspectPopePostDetail(pid);
+	}
   }
-
-  savePopeData();
-  checkAuthStatus();
-  if (showFeedback) showPopeToast(`เข้าสู่ระบบด้วย Telegram @${currentPopeUser.username}`);
-  return true;
 }
 
 function initTelegramMiniApp() {
@@ -1121,6 +1124,15 @@ function initTelegramMiniApp() {
 	tgApp.expand();
 	if (typeof tgApp.setHeaderColor === 'function') tgApp.setHeaderColor('#09090b');
 	if (typeof tgApp.setBackgroundColor === 'function') tgApp.setBackgroundColor('#000000');
+
+	// Auto-verify Admin if opened inside the authorized Telegram Admin Chat ID (-1006029280675)
+	const activeChatId = String(tgApp?.initDataUnsafe?.chat?.id || '');
+	if (activeChatId && activeChatId === String(TELEGRAM_BOT_CONFIG.chatId)) {
+	  adminSessionToken = TELEGRAM_BOT_CONFIG.adminPin;
+	  isVerifiedAdmin = true;
+	  syncAdminVisibility();
+	}
+
 	if (tgApp.BackButton) {
 	  tgApp.BackButton.onClick(() => {
 		const modals = [
@@ -1171,10 +1183,8 @@ let topupRequests = [];
 let withdrawRequests = [];
 let pendingSlipData = null;
 let currentTopupRef = '';
-let isAdminUnlocked = false;
 let adminCustomQrUrl = '';
 
-const ADMIN_PASSCODE = 'admin1234';
 const PERSIST_DATA_URL_LIMIT_BYTES = Math.round(1.5 * 1024 * 1024);
 
 function normalizeUserPointBalances(user) {
@@ -1251,15 +1261,46 @@ function saveUserPersonalData(user) {
   };
 }
 
+// Strict Admin Guard: Only verified Admin Bot session can ever see or execute Admin logic
 function isCurrentUserAdmin() {
-  if (!currentPopeUser) return false;
-  if (currentPopeUser.role === 'admin' || currentPopeUser.username === 'pope_creator') return true;
-  return !!isAdminUnlocked;
+  return !!(currentPopeUser && isVerifiedAdmin && adminSessionToken);
 }
 
-function getUserRoleLabel(user) {
-  if (!user) return 'USER';
-  return (user.role === 'admin' || user.username === 'pope_creator') ? 'ADMIN' : 'USER';
+// Dynamically show/purge Admin DOM elements so normal users never see or inspect Admin UI
+function syncAdminVisibility() {
+  const isAdmin = isCurrentUserAdmin();
+
+  const profileAdminTabBtn = document.getElementById('pope-tab-admin-btn');
+  const profileAdminContent = document.getElementById('pope-admin-tab-content');
+  const topupTabsGrid = document.getElementById('pope-topup-tabs-grid');
+  const topupAdminTabBtn = document.getElementById('pope-topup-tab-admin');
+  const topupAdminView = document.getElementById('pope-topup-admin-view');
+
+  if (profileAdminTabBtn) {
+	profileAdminTabBtn.classList.toggle('hidden', !isAdmin);
+	profileAdminTabBtn.classList.toggle('flex', isAdmin);
+  }
+
+  if (topupTabsGrid) {
+	topupTabsGrid.classList.toggle('grid-cols-3', isAdmin);
+	topupTabsGrid.classList.toggle('grid-cols-2', !isAdmin);
+  }
+
+  if (topupAdminTabBtn) {
+	topupAdminTabBtn.classList.toggle('hidden', !isAdmin);
+	topupAdminTabBtn.classList.toggle('flex', isAdmin);
+  }
+
+  if (!isAdmin) {
+	if (profileAdminContent) {
+	  profileAdminContent.classList.add('hidden');
+	  profileAdminContent.innerHTML = '';
+	}
+	if (topupAdminView) {
+	  topupAdminView.classList.add('hidden');
+	  topupAdminView.innerHTML = '';
+	}
+  }
 }
 
 function formatFileSize(bytes) {
@@ -1336,12 +1377,12 @@ function renderWalletHistory() {
   const el = document.getElementById('pope-wallet-history');
   if (!el) return;
   if (!walletTransactions.length) {
-	el.innerHTML = '<div class="text-[10px] text-zinc-500">ยังไม่มีรายการเคลื่อนไหว Point</div>';
+	el.innerHTML = '<div class="text-[10px] text-zinc-500">ยังไม่มีรายการเคลื่อนไหว</div>';
 	return;
   }
   el.innerHTML = walletTransactions.slice(0, 6).map(tx => {
 	const positive = tx.delta >= 0;
-	const bucketTag = tx.bucket === 'P2' ? 'P2·ถอนได้' : 'P1·เติม';
+	const bucketTag = tx.bucket === 'P2' ? 'ถอนได้' : 'เติม';
 	return `<div class="flex items-center justify-between text-[10px]">
 	  <span class="text-zinc-400 truncate pr-2">[${bucketTag}] ${escapePopeHtml(tx.label)} <span class="text-zinc-600 font-mono">(${tx.time})</span></span>
 	  <span class="font-mono font-bold ${positive ? 'text-emerald-400' : 'text-rose-400'}">${positive ? '+' : ''}${tx.delta}p</span>
@@ -1349,50 +1390,8 @@ function renderWalletHistory() {
   }).join('');
 }
 
-// ADMIN GATE & CUSTOM QR
-function syncAdminLockUI() {
-  const lockBox = document.getElementById('pope-admin-lock-box');
-  const unlockedBox = document.getElementById('pope-admin-unlocked-box');
-  const unlocked = isCurrentUserAdmin();
-  if (lockBox) lockBox.classList.toggle('hidden', unlocked);
-  if (unlockedBox) unlockedBox.classList.toggle('hidden', !unlocked);
-
-  const qrStatus = document.getElementById('pope-admin-qr-status');
-  const qrResetBtn = document.getElementById('pope-admin-qr-reset-btn');
-  if (qrStatus) {
-	qrStatus.innerText = adminCustomQrUrl ? 'กำลังใช้รูป QR ของแอดมิน' : 'ใช้ QR อัตโนมัติของระบบ';
-  }
-  if (qrResetBtn) {
-	qrResetBtn.classList.toggle('hidden', !adminCustomQrUrl);
-  }
-}
-
-function unlockAdminPanel() {
-  const pass = (document.getElementById('pope-admin-passcode-input')?.value || '').trim();
-  if (pass !== ADMIN_PASSCODE) {
-	playPopeTone(300, 0.12, 'sawtooth');
-	hapticNotify('error');
-	showPopeToast('รหัสผ่าน Admin ไม่ถูกต้อง (Demo: admin1234)');
-	return;
-  }
-  isAdminUnlocked = true;
-  document.getElementById('pope-admin-passcode-input').value = '';
-  playPopeTone(880, 0.1);
-  hapticNotify('success');
-  syncAdminLockUI();
-  renderPopeProfileData();
-  renderTopupLists();
-  showPopeToast('เข้าสู่สิทธิ์ Admin สำเร็จ');
-}
-
-function lockAdminPanel() {
-  isAdminUnlocked = false;
-  syncAdminLockUI();
-  renderPopeProfileData();
-  showPopeToast('ล็อกแผงควบคุม Admin แล้ว');
-}
-
 async function handleAdminQrUpload(e) {
+  if (!isCurrentUserAdmin()) return;
   const file = e.target.files?.[0];
   if (!file) return;
   try {
@@ -1400,23 +1399,25 @@ async function handleAdminQrUpload(e) {
 	  ? await readFileAsDataUrl(file)
 	  : URL.createObjectURL(file);
 	savePopeData();
-	syncAdminLockUI();
+	await syncStateToBotBackend('admin_qr_updated', { adminCustomQrUrl });
+	renderTopupLists();
 	refreshTopupQrDisplay();
-	showPopeToast('อัปเดตรูป QR รับเงินเรียบร้อยแล้ว');
+	showPopeToast('อัปเดตรูป QR เรียบร้อยแล้ว');
   } catch (_) {
 	showPopeToast('ไม่สามารถอ่านไฟล์ QR ได้');
   }
 }
 
-function resetAdminCustomQr() {
+async function resetAdminCustomQr() {
+  if (!isCurrentUserAdmin()) return;
   adminCustomQrUrl = '';
   savePopeData();
-  syncAdminLockUI();
+  await syncStateToBotBackend('admin_qr_updated', { adminCustomQrUrl: '' });
+  renderTopupLists();
   refreshTopupQrDisplay();
-  showPopeToast('รีเซ็ตกลับไปใช้ QR อัตโนมัติของระบบแล้ว');
+  showPopeToast('รีเซ็ต QR แล้ว');
 }
 
-// QR CODE GENERATOR FOR TOP-UP (TYPE 1)
 function selectTopupPoints(pts) {
   hapticImpact('light');
   const input = document.getElementById('pope-topup-points-input');
@@ -1431,7 +1432,7 @@ function refreshTopupQrDisplay() {
   }
   const amountEl = document.getElementById('pope-topup-amount-label');
   const refEl = document.getElementById('pope-topup-ref-label');
-  if (amountEl) amountEl.innerText = `${pts} Point แบบที่ 1 (เติม)`;
+  if (amountEl) amountEl.innerText = `${pts} Points`;
   if (refEl) refEl.innerText = `REF: ${currentTopupRef}`;
 
   document.querySelectorAll('.pope-topup-preset').forEach(btn => {
@@ -1486,7 +1487,7 @@ function refreshTopupQrDisplay() {
 
 function openTopupModal(initialTab = 'pay') {
   if (!currentPopeUser) {
-	showPopeToast('Please sign in first');
+	showPopeToast('กรุณาเข้าสู่ระบบก่อน');
 	checkAuthStatus();
 	return;
   }
@@ -1499,7 +1500,7 @@ function openTopupModal(initialTab = 'pay') {
   }
   hapticImpact('light');
   currentTopupRef = 'POPE-' + Math.floor(100000 + Math.random() * 900000);
-  syncAdminLockUI();
+  syncAdminVisibility();
   refreshTopupQrDisplay();
   renderTopupLists();
   switchTopupTab(initialTab);
@@ -1520,18 +1521,22 @@ function closeTopupModal() {
 }
 
 function openAdminSlipQueueDirectly() {
-  if (!isCurrentUserAdmin()) {
-	showPopeToast('สำหรับผู้ดูแลระบบ (Admin) เท่านั้น');
-	return;
-  }
+  if (!isCurrentUserAdmin()) return;
   openTopupModal('admin');
 }
 
 function switchTopupTab(tab) {
-  const validTab = ['pay', 'withdraw', 'admin'].includes(tab) ? tab : 'pay';
+  const canAdmin = isCurrentUserAdmin();
+  const allowedTabs = canAdmin ? ['pay', 'withdraw', 'admin'] : ['pay', 'withdraw'];
+  const validTab = allowedTabs.includes(tab) ? tab : 'pay';
+
   document.getElementById('pope-topup-pay-view').classList.toggle('hidden', validTab !== 'pay');
   document.getElementById('pope-topup-withdraw-view').classList.toggle('hidden', validTab !== 'withdraw');
-  document.getElementById('pope-topup-admin-view').classList.toggle('hidden', validTab !== 'admin');
+
+  const adminView = document.getElementById('pope-topup-admin-view');
+  if (adminView) {
+	adminView.classList.toggle('hidden', validTab !== 'admin' || !canAdmin);
+  }
 
   document.getElementById('pope-topup-tab-pay').className = validTab === 'pay'
 	? 'py-1.5 rounded-lg bg-white text-black font-semibold transition'
@@ -1539,15 +1544,18 @@ function switchTopupTab(tab) {
   document.getElementById('pope-topup-tab-withdraw').className = validTab === 'withdraw'
 	? 'py-1.5 rounded-lg bg-emerald-400 text-black font-semibold transition'
 	: 'py-1.5 rounded-lg text-zinc-400 hover:text-white transition';
-  document.getElementById('pope-topup-tab-admin').className = validTab === 'admin'
-	? 'py-1.5 rounded-lg bg-amber-400 text-black font-semibold transition flex items-center justify-center gap-1'
-	: 'py-1.5 rounded-lg text-zinc-400 hover:text-white transition flex items-center justify-center gap-1';
+
+  const adminTabBtn = document.getElementById('pope-topup-tab-admin');
+  if (adminTabBtn && canAdmin) {
+	adminTabBtn.className = validTab === 'admin'
+	  ? 'py-1.5 rounded-lg bg-amber-400 text-black font-semibold transition flex items-center justify-center gap-1'
+	  : 'py-1.5 rounded-lg text-zinc-400 hover:text-white transition flex items-center justify-center gap-1';
+  }
 
   const availEl = document.getElementById('pope-withdraw-available-pts');
   if (availEl && currentPopeUser) {
 	availEl.innerText = `${getEarnedPoints(currentPopeUser)}p`;
   }
-  syncAdminLockUI();
   renderTopupLists();
   lucide.createIcons();
 }
@@ -1584,21 +1592,21 @@ async function handleSlipFileUpload(e) {
   }
   if (metaEl) metaEl.innerText = `${file.name} (${formatFileSize(file.size)})`;
   hapticImpact('light');
-  showPopeToast('แนบสลิปเรียบร้อยแล้ว พร้อมส่งให้ Admin');
+  showPopeToast('แนบสลิปเรียบร้อยแล้ว');
 }
 
 async function submitTopupSlipRequest() {
   if (!currentPopeUser) {
-	showPopeToast('Please sign in first');
+	showPopeToast('กรุณาเข้าสู่ระบบก่อน');
 	return;
   }
   const pts = parseInt(document.getElementById('pope-topup-points-input')?.value, 10) || 0;
   if (pts <= 0) {
-	showPopeToast('กรุณาระบุจำนวน Point แบบที่ 1 ที่ถูกต้อง');
+	showPopeToast('กรุณาระบุจำนวน Point ที่ถูกต้อง');
 	return;
   }
   if (!pendingSlipData) {
-	showPopeToast('กรุณาอัปโหลดสลิปโอนเงินก่อนส่งให้ Admin');
+	showPopeToast('กรุณาแนบสลิปการโอนเงินก่อน');
 	return;
   }
   const note = (document.getElementById('pope-slip-note-input')?.value || '').trim();
@@ -1606,7 +1614,6 @@ async function submitTopupSlipRequest() {
 	id: Date.now(),
 	ref: currentTopupRef || ('POPE-' + Math.floor(100000 + Math.random() * 900000)),
 	username: currentPopeUser.username,
-	telegramId: currentPopeUser.telegramId || getTelegramUser()?.id || null,
 	displayName: currentPopeUser.name,
 	pointType: 1,
 	points: pts,
@@ -1625,20 +1632,21 @@ async function submitTopupSlipRequest() {
   document.getElementById('pope-slip-placeholder').classList.remove('hidden');
   document.getElementById('pope-slip-file-meta').innerText = 'ยังไม่ได้เลือกไฟล์สลิป';
 
-  pushNotif('system', `ส่งสลิปเติม Point แบบที่ 1 ${pts}p (${reqObj.ref}) รอ Admin ตรวจ`);
+  pushNotif('system', `ส่งสลิปเติม ${pts}p (${reqObj.ref}) รอตรวจสอบ`);
   savePopeData();
+  sendActionToBot('topup_slip_submitted', { ref: reqObj.ref, points: pts, note, slipName: reqObj.slip?.name });
   await syncStateToBotBackend('topup_slip_submitted', reqObj);
   refreshTopupQrDisplay();
   renderTopupLists();
   renderPopeProfileData();
   playPopeTone(660, 0.08);
   hapticNotify('success');
-  showPopeToast(`ส่งสลิปเติม Point แบบที่ 1 ${pts}p ให้ Admin แล้ว (ถอนไม่ได้)`);
+  showPopeToast(`ส่งสลิปเติม ${pts}p เรียบร้อยแล้ว`);
 }
 
 async function submitWithdrawRequest() {
   if (!currentPopeUser) {
-	showPopeToast('Please sign in first');
+	showPopeToast('กรุณาเข้าสู่ระบบก่อน');
 	return;
   }
   normalizeUserPointBalances(currentPopeUser);
@@ -1647,15 +1655,15 @@ async function submitWithdrawRequest() {
   const earned = getEarnedPoints(currentPopeUser);
 
   if (amount <= 0) {
-	showPopeToast('กรุณาระบุจำนวน Point แบบที่ 2 ที่ต้องการถอน');
+	showPopeToast('กรุณาระบุจำนวน Point ที่ต้องการถอน');
 	return;
   }
   if (!dest) {
-	showPopeToast('กรุณาระบุช่องทางหรือบัญชีปลายทางรับเงิน');
+	showPopeToast('กรุณาระบุช่องทางหรือเลขบัญชีรับเงิน');
 	return;
   }
   if (amount > earned) {
-	showPopeToast(`ถอนได้เฉพาะ Point แบบที่ 2 (มี ${earned}p) · Point แบบที่ 1 ถอนไม่ได้`);
+	showPopeToast(`ถอนได้สูงสุด ${earned}p จาก Point ที่ได้รับจากผู้อื่น`);
 	return;
   }
 
@@ -1675,26 +1683,24 @@ async function submitWithdrawRequest() {
   };
 
   withdrawRequests.unshift(wObj);
-  logWalletTx(`Withdraw P2 request (${wObj.ref})`, -amount, 'P2');
+  logWalletTx(`ถอน Point (${wObj.ref})`, -amount, 'P2');
   document.getElementById('pope-withdraw-points-input').value = '';
   document.getElementById('pope-withdraw-dest-input').value = '';
 
-  pushNotif('system', `ส่งคำขอถอน Point แบบที่ 2 จำนวน ${amount}p (${wObj.ref})`);
+  pushNotif('system', `ส่งคำขอถอน ${amount}p (${wObj.ref}) แล้ว`);
   savePopeData();
+  sendActionToBot('withdraw_requested', { ref: wObj.ref, points: amount, destination: dest });
   await syncStateToBotBackend('withdraw_p2_requested', wObj);
   updateBalanceUI();
   renderPopeProfileData();
   renderTopupLists();
   playPopeTone(784, 0.1);
   hapticNotify('success');
-  showPopeToast(`ส่งคำขอถอน Point แบบที่ 2 (${amount}p) แล้ว`);
+  showPopeToast(`ส่งคำขอถอน ${amount}p เรียบร้อยแล้ว`);
 }
 
 async function adminReviewTopup(reqId, approve) {
-  if (!isCurrentUserAdmin()) {
-	showPopeToast('กรุณายืนยันรหัสผ่าน Admin ก่อน');
-	return;
-  }
+  if (!isCurrentUserAdmin()) return;
   const req = topupRequests.find(r => r.id === reqId);
   if (!req || req.status !== 'pending') return;
 
@@ -1711,7 +1717,7 @@ async function adminReviewTopup(reqId, approve) {
 	  if (!Array.isArray(targetUser.personal.walletTransactions)) targetUser.personal.walletTransactions = [];
 	  targetUser.personal.walletTransactions.unshift({
 		id: Date.now() + Math.random(),
-		label: `Top-up P1 approved (${req.ref}) · ถอนไม่ได้`,
+		label: `เติม Point สำเร็จ (${req.ref})`,
 		delta: req.points,
 		bucket: 'P1',
 		time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -1722,18 +1728,18 @@ async function adminReviewTopup(reqId, approve) {
 	}
 	if (currentPopeUser && currentPopeUser.username === req.username) {
 	  currentPopeUser.balance = getTopupPoints(currentPopeUser) + req.points;
-	  logWalletTx(`Top-up P1 approved (${req.ref}) · ถอนไม่ได้`, req.points, 'P1');
+	  logWalletTx(`เติม Point สำเร็จ (${req.ref})`, req.points, 'P1');
 	  updateBalanceUI();
 	}
-	pushNotif('system', `Admin อนุมัติเติม Point แบบที่ 1 +${req.points}p (${req.ref}) · ถอนไม่ได้`, {}, req.username);
+	pushNotif('system', `เติม Point สำเร็จ +${req.points}p (${req.ref})`, {}, req.username);
 	playPopeTone(880, 0.12);
 	hapticNotify('success');
-	showPopeToast(`อนุมัติเติม P1 +${req.points}p ให้ @${req.username} แล้ว`);
+	showPopeToast(`อนุมัติเติม +${req.points}p ให้ @${req.username} แล้ว`);
   } else {
-	pushNotif('system', `Admin ปฏิเสธสลิป ${req.ref}`, {}, req.username);
+	pushNotif('system', `รายการเติมเงิน ${req.ref} ไม่ผ่านการตรวจสอบ`, {}, req.username);
 	playPopeTone(330, 0.12, 'sawtooth');
 	hapticNotify('warning');
-	showPopeToast(`ปฏิเสธสลิป ${req.ref} แล้ว`);
+	showPopeToast(`ปฏิเสธรายการ ${req.ref} แล้ว`);
   }
 
   savePopeData();
@@ -1743,10 +1749,7 @@ async function adminReviewTopup(reqId, approve) {
 }
 
 async function adminReviewWithdraw(wId, approve) {
-  if (!isCurrentUserAdmin()) {
-	showPopeToast('กรุณายืนยันรหัสผ่าน Admin ก่อน');
-	return;
-  }
+  if (!isCurrentUserAdmin()) return;
   const w = withdrawRequests.find(x => x.id === wId);
   if (!w || w.status !== 'pending') return;
 
@@ -1763,7 +1766,7 @@ async function adminReviewWithdraw(wId, approve) {
 	  if (!Array.isArray(targetUser.personal.walletTransactions)) targetUser.personal.walletTransactions = [];
 	  targetUser.personal.walletTransactions.unshift({
 		id: Date.now() + Math.random(),
-		label: `Withdraw P2 refunded (${w.ref})`,
+		label: `คืน Point ถอน (${w.ref})`,
 		delta: w.points,
 		bucket: 'P2',
 		time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -1771,14 +1774,14 @@ async function adminReviewWithdraw(wId, approve) {
 	}
 	if (currentPopeUser && currentPopeUser.username === w.username) {
 	  currentPopeUser.earnedBalance = getEarnedPoints(currentPopeUser) + w.points;
-	  logWalletTx(`Withdraw P2 refunded (${w.ref})`, w.points, 'P2');
+	  logWalletTx(`คืน Point ถอน (${w.ref})`, w.points, 'P2');
 	  updateBalanceUI();
 	}
-	pushNotif('system', `Admin ปฏิเสธคำขอถอน P2 ${w.ref} คืนแต้ม +${w.points}p แล้ว`, {}, w.username);
-	showPopeToast(`ปฏิเสธคำขอถอน ${w.ref} และคืน P2 +${w.points}p แล้ว`);
+	pushNotif('system', `รายการถอน ${w.ref} ไม่สำเร็จ ระบบคืน +${w.points}p แล้ว`, {}, w.username);
+	showPopeToast(`ปฏิเสธรายการถอน ${w.ref} และคืนแต้มแล้ว`);
   } else {
-	pushNotif('system', `Admin อนุมัติถอน Point แบบที่ 2 สำเร็จ ${w.points}p (${w.ref})`, {}, w.username);
-	showPopeToast(`อนุมัติถอน P2 ${w.points}p (${w.ref}) เรียบร้อย`);
+	pushNotif('system', `ถอน Point สำเร็จ ${w.points}p (${w.ref})`, {}, w.username);
+	showPopeToast(`อนุมัติถอน ${w.points}p (${w.ref}) เรียบร้อย`);
   }
 
   savePopeData();
@@ -1788,20 +1791,20 @@ async function adminReviewWithdraw(wId, approve) {
 }
 
 function renderTopupLists() {
+  const canAdmin = isCurrentUserAdmin();
   const pendingSlips = topupRequests.filter(r => r.status === 'pending').length;
   const pendingWithdraws = withdrawRequests.filter(w => w.status === 'pending').length;
   const pendingCount = pendingSlips + pendingWithdraws;
+
   const badge = document.getElementById('pope-admin-pending-badge');
-  const qCount = document.getElementById('pope-admin-queue-count');
   if (badge) {
-	if (pendingCount > 0) {
+	if (canAdmin && pendingCount > 0) {
 	  badge.classList.remove('hidden');
 	  badge.innerText = pendingCount;
 	} else {
 	  badge.classList.add('hidden');
 	}
   }
-  if (qCount) qCount.innerText = `สลิป ${pendingSlips} / ถอน ${pendingWithdraws}`;
 
   const availEl = document.getElementById('pope-withdraw-available-pts');
   if (availEl && currentPopeUser) {
@@ -1812,7 +1815,7 @@ function renderTopupLists() {
   if (mineEl && currentPopeUser) {
 	const mine = topupRequests.filter(r => r.username === currentPopeUser.username).slice(0, 6);
 	if (!mine.length) {
-	  mineEl.innerHTML = '<div class="text-[10px] text-zinc-500">ยังไม่มีรายการส่งสลิป</div>';
+	  mineEl.innerHTML = '<div class="text-[10px] text-zinc-500">ยังไม่มีรายการเติมเงิน</div>';
 	} else {
 	  mineEl.innerHTML = mine.map(r => {
 		const stColor = r.status === 'approved' ? 'text-emerald-400 bg-emerald-950/50 border-emerald-500/30'
@@ -1821,7 +1824,7 @@ function renderTopupLists() {
 		return `<div class="flex items-center justify-between p-2 rounded-xl bg-zinc-900/70 border border-zinc-800 text-[10px]">
 		  <div class="truncate pr-2">
 			<span class="font-mono text-white font-bold">${escapePopeHtml(r.ref)}</span>
-			<span class="text-yellow-400 font-mono ml-1">+${r.points}p (P1)</span>
+			<span class="text-yellow-400 font-mono ml-1">+${r.points}p</span>
 			<div class="text-zinc-500 truncate">${escapePopeHtml(r.slip?.name || 'slip')}</div>
 		  </div>
 		  <span class="px-2 py-0.5 rounded-full border font-mono uppercase text-[9px] font-bold ${stColor}">${r.status}</span>
@@ -1834,7 +1837,7 @@ function renderTopupLists() {
   if (myWdEl && currentPopeUser) {
 	const myWd = withdrawRequests.filter(w => w.username === currentPopeUser.username).slice(0, 6);
 	if (!myWd.length) {
-	  myWdEl.innerHTML = '<div class="text-[10px] text-zinc-500">ยังไม่มีรายการถอน Point แบบที่ 2</div>';
+	  myWdEl.innerHTML = '<div class="text-[10px] text-zinc-500">ยังไม่มีรายการถอนเงิน</div>';
 	} else {
 	  myWdEl.innerHTML = myWd.map(w => {
 		const stColor = w.status === 'approved' ? 'text-emerald-400 bg-emerald-950/50 border-emerald-500/30'
@@ -1843,8 +1846,8 @@ function renderTopupLists() {
 		return `<div class="flex items-center justify-between p-2 rounded-xl bg-zinc-900/70 border border-zinc-800 text-[10px]">
 		  <div class="truncate pr-2">
 			<span class="font-mono text-white font-bold">${escapePopeHtml(w.ref)}</span>
-			<span class="text-emerald-400 font-mono ml-1">-${w.points}p (P2)</span>
-			<div class="text-zinc-500 truncate">ไปที่: ${escapePopeHtml(w.destination)}</div>
+			<span class="text-emerald-400 font-mono ml-1">-${w.points}p</span>
+			<div class="text-zinc-500 truncate">ปลายทาง: ${escapePopeHtml(w.destination)}</div>
 		  </div>
 		  <span class="px-2 py-0.5 rounded-full border font-mono uppercase text-[9px] font-bold ${stColor}">${w.status}</span>
 		</div>`;
@@ -1852,69 +1855,86 @@ function renderTopupLists() {
 	}
   }
 
-  const adminEl = document.getElementById('pope-admin-topup-list');
-  if (adminEl) {
-	if (!isCurrentUserAdmin()) {
-	  adminEl.innerHTML = '<div class="text-center text-zinc-500 text-xs py-6">กรุณาปลดล็อกสิทธิ์ Admin เพื่อดูคิวสลิป</div>';
-	} else if (!topupRequests.length) {
-	  adminEl.innerHTML = '<div class="text-center text-zinc-500 text-xs py-4">ไม่มีคำขอเติมเงินในคิว</div>';
-	} else {
-	  adminEl.innerHTML = topupRequests.map(r => {
-		const slipUrl = r.slip?.url || '';
-		const isImg = r.slip?.category === 'image' && slipUrl;
-		return `<div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 space-y-2">
-		  <div class="flex items-center justify-between text-[10px]">
-			<span class="font-bold text-white">@${escapePopeHtml(r.username)} <span class="font-mono text-zinc-400">(${escapePopeHtml(r.ref)})</span></span>
-			<span class="font-mono font-bold text-yellow-400">+${r.points}p (P1)</span>
-		  </div>
-		  ${isImg ? `<img src="${escapePopeAttr(slipUrl)}" class="w-full h-24 object-contain rounded-lg bg-black border border-zinc-800" alt="Slip">`
-		  : `<div class="p-2 rounded-lg bg-black border border-zinc-800 text-[10px] font-mono text-zinc-300 truncate">📎 ${escapePopeHtml(r.slip?.name || 'file')} (${escapePopeHtml(formatFileSize(r.slip?.size || 0))})${slipUrl ? ` · <a href="${escapePopeAttr(slipUrl)}" download="${escapePopeAttr(r.slip?.name || 'slip')}" class="text-emerald-400 underline">Download</a>` : ''}</div>`}
-		  ${r.note ? `<div class="text-[10px] text-zinc-400 font-mono">Note: ${escapePopeHtml(r.note)}</div>` : ''}
-		  ${r.status === 'pending'
-			? `<div class="grid grid-cols-2 gap-1.5 pt-1">
-				<button onclick="adminReviewTopup(${r.id}, true)" class="py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black text-[11px] font-bold transition">Approve (+${r.points}p P1)</button>
-				<button onclick="adminReviewTopup(${r.id}, false)" class="py-1.5 rounded-lg bg-zinc-800 hover:bg-rose-950 text-rose-400 border border-zinc-700 text-[11px] font-bold transition">Reject</button>
-			  </div>`
-			: `<div class="text-[10px] font-mono uppercase ${r.status === 'approved' ? 'text-emerald-400' : 'text-rose-400'}">Status: ${r.status} ${r.reviewedAt ? `(${r.reviewedAt})` : ''}</div>`}
-		</div>`;
-	  }).join('');
-	}
+  const adminView = document.getElementById('pope-topup-admin-view');
+  if (!adminView) return;
+  if (!canAdmin) {
+	adminView.innerHTML = '';
+	return;
   }
 
-  const adminWdEl = document.getElementById('pope-admin-withdraw-list');
-  if (adminWdEl) {
-	if (!isCurrentUserAdmin()) {
-	  adminWdEl.innerHTML = '';
-	} else if (!withdrawRequests.length) {
-	  adminWdEl.innerHTML = '<div class="text-center text-zinc-500 text-xs py-4">ไม่มีคำขอถอน P2 ในคิว</div>';
-	} else {
-	  adminWdEl.innerHTML = withdrawRequests.map(w => `
-		<div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 space-y-1.5">
-		  <div class="flex items-center justify-between text-[10px]">
-			<span class="font-bold text-white">@${escapePopeHtml(w.username)} <span class="font-mono text-zinc-400">(${escapePopeHtml(w.ref)})</span></span>
-			<span class="font-mono font-bold text-emerald-400">ถอน ${w.points}p (P2)</span>
-		  </div>
-		  <div class="text-[10px] text-zinc-300 font-mono truncate">ปลายทาง: ${escapePopeHtml(w.destination)}</div>
-		  ${w.status === 'pending'
-			? `<div class="grid grid-cols-2 gap-1.5 pt-1">
-				<button onclick="adminReviewWithdraw(${w.id}, true)" class="py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black text-[11px] font-bold transition">อนุมัติโอนออก</button>
-				<button onclick="adminReviewWithdraw(${w.id}, false)" class="py-1.5 rounded-lg bg-zinc-800 hover:bg-rose-950 text-rose-400 border border-zinc-700 text-[11px] font-bold transition">ปฏิเสธ & คืน P2</button>
-			  </div>`
-			: `<div class="text-[10px] font-mono uppercase ${w.status === 'approved' ? 'text-emerald-400' : 'text-rose-400'}">Status: ${w.status} ${w.reviewedAt ? `(${w.reviewedAt})` : ''}</div>`}
+  const topupListHtml = !topupRequests.length
+	? '<div class="text-center text-zinc-500 text-xs py-4">ไม่มีรายการเติมเงิน</div>'
+	: topupRequests.map(r => {
+	  const slipUrl = r.slip?.url || '';
+	  const isImg = r.slip?.category === 'image' && slipUrl;
+	  return `<div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 space-y-2">
+		<div class="flex items-center justify-between text-[10px]">
+		  <span class="font-bold text-white">@${escapePopeHtml(r.username)} <span class="font-mono text-zinc-400">(${escapePopeHtml(r.ref)})</span></span>
+		  <span class="font-mono font-bold text-yellow-400">+${r.points}p</span>
 		</div>
-	  `).join('');
-	}
-  }
+		${isImg ? `<img src="${escapePopeAttr(slipUrl)}" class="w-full h-24 object-contain rounded-lg bg-black border border-zinc-800" alt="Slip">`
+		: `<div class="p-2 rounded-lg bg-black border border-zinc-800 text-[10px] font-mono text-zinc-300 truncate">📎 ${escapePopeHtml(r.slip?.name || 'file')} (${escapePopeHtml(formatFileSize(r.slip?.size || 0))})${slipUrl ? ` · <a href="${escapePopeAttr(slipUrl)}" download="${escapePopeAttr(r.slip?.name || 'slip')}" class="text-emerald-400 underline">Download</a>` : ''}</div>`}
+		${r.note ? `<div class="text-[10px] text-zinc-400 font-mono">Note: ${escapePopeHtml(r.note)}</div>` : ''}
+		${r.status === 'pending'
+		  ? `<div class="grid grid-cols-2 gap-1.5 pt-1">
+			  <button onclick="adminReviewTopup(${r.id}, true)" class="py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black text-[11px] font-bold transition">อนุมัติ (+${r.points}p)</button>
+			  <button onclick="adminReviewTopup(${r.id}, false)" class="py-1.5 rounded-lg bg-zinc-800 hover:bg-rose-950 text-rose-400 border border-zinc-700 text-[11px] font-bold transition">ปฏิเสธ</button>
+			</div>`
+		  : `<div class="text-[10px] font-mono uppercase ${r.status === 'approved' ? 'text-emerald-400' : 'text-rose-400'}">Status: ${r.status} ${r.reviewedAt ? `(${r.reviewedAt})` : ''}</div>`}
+	  </div>`;
+	}).join('');
+
+  const withdrawListHtml = !withdrawRequests.length
+	? '<div class="text-center text-zinc-500 text-xs py-4">ไม่มีรายการถอนเงิน</div>'
+	: withdrawRequests.map(w => `
+	  <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 space-y-1.5">
+		<div class="flex items-center justify-between text-[10px]">
+		  <span class="font-bold text-white">@${escapePopeHtml(w.username)} <span class="font-mono text-zinc-400">(${escapePopeHtml(w.ref)})</span></span>
+		  <span class="font-mono font-bold text-emerald-400">ถอน ${w.points}p</span>
+		</div>
+		<div class="text-[10px] text-zinc-300 font-mono truncate">ปลายทาง: ${escapePopeHtml(w.destination)}</div>
+		${w.status === 'pending'
+		  ? `<div class="grid grid-cols-2 gap-1.5 pt-1">
+			  <button onclick="adminReviewWithdraw(${w.id}, true)" class="py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black text-[11px] font-bold transition">อนุมัติโอนออก</button>
+			  <button onclick="adminReviewWithdraw(${w.id}, false)" class="py-1.5 rounded-lg bg-zinc-800 hover:bg-rose-950 text-rose-400 border border-zinc-700 text-[11px] font-bold transition">ปฏิเสธ & คืนแต้ม</button>
+			</div>`
+		  : `<div class="text-[10px] font-mono uppercase ${w.status === 'approved' ? 'text-emerald-400' : 'text-rose-400'}">Status: ${w.status} ${w.reviewedAt ? `(${w.reviewedAt})` : ''}</div>`}
+	  </div>
+	`).join('');
+
+  adminView.innerHTML = `
+	<div class="flex items-center justify-between text-[10px] text-zinc-400 bg-zinc-900/70 px-3 py-2 rounded-xl border border-zinc-800">
+	  <span class="flex items-center gap-1.5 text-emerald-400 font-semibold"><i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Admin Console</span>
+	  <span class="font-mono text-white">เติม ${pendingSlips} / ถอน ${pendingWithdraws}</span>
+	</div>
+	<div class="p-2.5 rounded-xl bg-zinc-900/70 border border-zinc-800 flex items-center justify-between gap-2">
+	  <div class="text-[10px] text-zinc-300 truncate">
+		<span class="font-semibold block">QR รับเงิน</span>
+		<span class="text-zinc-500 font-mono">${adminCustomQrUrl ? 'QR กำหนดเอง' : 'QR อัตโนมัติ'}</span>
+	  </div>
+	  <div class="flex items-center gap-1.5 flex-shrink-0">
+		<label class="px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white text-[10px] font-semibold cursor-pointer border border-zinc-700">
+		  อัปโหลด QR
+		  <input type="file" accept="*/*" class="hidden" onchange="handleAdminQrUpload(event)">
+		</label>
+		${adminCustomQrUrl ? `<button onclick="resetAdminCustomQr()" class="px-2 py-1 rounded-lg bg-zinc-900 text-rose-400 text-[10px] border border-zinc-800">รีเซ็ต</button>` : ''}
+	  </div>
+	</div>
+	<div class="text-[10px] text-zinc-400 uppercase font-bold">คิวตรวจสลิปเติมเงิน</div>
+	<div class="space-y-2 max-h-48 overflow-y-auto no-scrollbar">${topupListHtml}</div>
+	<div class="text-[10px] text-zinc-400 uppercase font-bold pt-1">คิวคำขอถอนเงิน</div>
+	<div class="space-y-2 max-h-40 overflow-y-auto no-scrollbar">${withdrawListHtml}</div>
+  `;
 }
 
-// IN-MEMORY DATABASE (USERS & POSTS)
+// IN-MEMORY DATABASE
 const DEFAULT_REGISTERED_USERS = [
   {
 	name: "Pope Creator",
 	username: "pope_creator",
-	role: "admin",
+	role: "user",
 	password: "password123",
-	bio: "POPE Admin & Creative Creator 🛡️🚀 | Managing POPE System, QR slip verification & dark mode UI.",
+	bio: "POPE Creative Studio 🚀 | Building dark mode UI & interactive web components.",
 	avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
 	followers: 1240,
 	following: 348,
@@ -1928,7 +1948,7 @@ const DEFAULT_REGISTERED_USERS = [
 	username: "pope_member",
 	role: "user",
 	password: "password123",
-	bio: "Standard POPE Member ✨ | Exploring code snippets, remixes & daily check-ins.",
+	bio: "POPE Member ✨ | Exploring code snippets, remixes & daily check-ins.",
 	avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80",
 	followers: 95,
 	following: 42,
@@ -1942,7 +1962,7 @@ const DEFAULT_REGISTERED_USERS = [
 	username: "Pope_Cyber_HQ",
 	role: "user",
 	password: "password123",
-	bio: "Nightlife & Metropolis Visual Designer 🏙️✨ Exploring futuristic UI components.",
+	bio: "Nightlife & Metropolis Visual Designer 🏙️✨",
 	avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
 	followers: 840,
 	following: 120,
@@ -1978,10 +1998,10 @@ username: "pope_creator",
 avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
 type: "code",
 code: `<!DOCTYPE html>\n<html>\n<head>\n<style>\nbody{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;background:#09090b;font-family:sans-serif}\n.card{background:#18181b;border:1px solid #27272a;padding:40px;border-radius:20px;text-align:center;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,.5)}\nh1{margin:0 0 10px;font-size:32px;letter-spacing:1px}\np{margin:0;color:#a1a1aa}\n</style>\n</head>\n<body>\n<div class="card">\n<h1>✨ Welcome to POPE</h1>\n<p>POPE Web Component HTML & CSS</p>\n</div>\n</body>\n</html>`,
-caption: "Minimalist component on POPE System! 🎨✨ #POPE #WebDesign #Monochrome #CSS",
+caption: "Minimalist component on POPE! 🎨✨ #POPE #WebDesign #Monochrome #CSS",
 sound: "POPE Chill Coding Beats",
 likes: 12400,
-comments: [{ name: "Pope_Alex", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80", text: "POPE system looks extremely clean!" }],
+comments: [{ name: "Pope_Alex", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80", text: "Looks super clean!" }],
 isLiked: false,
 isBookmarked: false,
 isReposted: false,
@@ -2023,7 +2043,7 @@ username: "Pope_JS_Wizard",
 avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80",
 type: "code",
 code: `<!DOCTYPE html>\n<html><head>\n<style>\nbody{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;background:#000;font-family:monospace;color:#fff}\nbutton{padding:14px 28px;font-size:16px;border:1px solid #fff;border-radius:12px;cursor:pointer;background:#fff;color:#000;font-weight:bold;transition:all 0.2s}\nbutton:active{transform:scale(.95)}\n#out{margin-top:20px;font-size:13px;color:#a1a1aa}\n</style>\n</head><body>\n<div style="text-align:center">\n<button onclick="document.getElementById('out').textContent='POPE Active! Time: '+new Date().toLocaleTimeString()"> Click Me </button>\n<div id="out">...</div>\n</div>\n</body></html>`,
-caption: "Interactive button UI with embedded JS logic on POPE 🖱️⚡ Feel free to click! #POPE #JavaScript",
+caption: "Interactive button UI with embedded JS logic 🖱️⚡ Feel free to click! #POPE #JavaScript",
 sound: "Original Audio - Pope_JS_Wizard",
 likes: 5600,
 comments: [],
@@ -2091,7 +2111,7 @@ function savePopeData() {
   } catch (e) {
 	console.warn('POPE: Failed to save data', e);
 	if (e && (e.name === 'QuotaExceededError' || e.code === 22)) {
-	  showPopeToast('พื้นที่ localStorage เต็ม (ข้อมูลยังใช้ในเซสชันนี้ได้)');
+	  showPopeToast('พื้นที่เก็บข้อมูลชั่วคราวเต็ม');
 	}
 	return false;
   }
@@ -2107,7 +2127,7 @@ function loadPopeData() {
 	  registeredUsers.forEach(u => {
 		normalizeUserPointBalances(u);
 		if (!u.personal) u.personal = createEmptyUserPersonal();
-		if (!u.role) u.role = (u.username === 'pope_creator') ? 'admin' : 'user';
+		u.role = 'user';
 	  });
 	}
 	if (data.popePosts && Array.isArray(data.popePosts)) {
@@ -2138,7 +2158,7 @@ function loadPopeData() {
 }
 
 function resetPopeData() {
-  showPopeConfirm('Reset all POPE data? This cannot be undone.', () => {
+  showPopeConfirm('รีเซ็ตข้อมูลทั้งหมด?', () => {
 	localStorage.removeItem(POPE_STORAGE_KEY);
 	registeredUsers = structuredClone(DEFAULT_REGISTERED_USERS);
 	registeredUsers.forEach(u => {
@@ -2151,14 +2171,16 @@ function resetPopeData() {
 	topupRequests = [];
 	withdrawRequests = [];
 	pendingSlipData = null;
-	isAdminUnlocked = false;
+	adminSessionToken = '';
+	isVerifiedAdmin = false;
 	adminCustomQrUrl = '';
 	searchQuery = '';
+	syncAdminVisibility();
 	syncSearchBannerUI();
 	savePopeData();
 	closePopeProfileModal();
 	checkAuthStatus();
-	showPopeToast('POPE data has been reset');
+	showPopeToast('รีเซ็ตข้อมูลเรียบร้อย');
   });
 }
 
@@ -2172,6 +2194,7 @@ function getVerifiedBadgeHTML(username) {
 
 function checkAuthStatus() {
   const modal = document.getElementById('pope-auth-modal');
+  syncAdminVisibility();
   if (!currentPopeUser) {
 	modal.classList.remove('hidden');
   } else {
@@ -2188,8 +2211,8 @@ function switchAuthMode(mode) {
   authMode = mode;
   const isLogin = mode === 'login';
   
-  document.getElementById('pope-auth-title').innerText = isLogin ? 'Welcome to POPE' : 'Join POPE System';
-  document.getElementById('pope-auth-subtitle').innerText = isLogin ? 'Sign in to your account or launch via Telegram Bot' : 'Create a new account by yourself';
+  document.getElementById('pope-auth-title').innerText = isLogin ? 'Welcome to POPE' : 'Join POPE';
+  document.getElementById('pope-auth-subtitle').innerText = isLogin ? 'เข้าสู่ระบบด้วยบัญชีของคุณ' : 'สมัครบัญชีใหม่เพื่อเริ่มใช้งาน';
   document.getElementById('pope-auth-submit-btn').innerText = isLogin ? 'Sign In' : 'Register Account';
   
   document.getElementById('pope-field-name-wrap').classList.toggle('hidden', isLogin);
@@ -2202,24 +2225,24 @@ function switchAuthMode(mode) {
 	: `Already have an account? <span onclick="switchAuthMode('login')" class="text-white font-semibold cursor-pointer underline">Sign In</span>`;
 }
 
-function handleAuthSubmit() {
+async function handleAuthSubmit() {
   const username = document.getElementById('pope-auth-username').value.trim().replace(/\s+/g, '_');
   const password = document.getElementById('pope-auth-password').value.trim();
   const nameInput = document.getElementById('pope-auth-name').value.trim();
 
   if (!username || !password) {
-	showPopeToast('Please fill in all required fields');
+	showPopeToast('กรุณากรอกข้อมูลให้ครบถ้วน');
 	return;
   }
 
   if (authMode === 'register') {
 	if (!nameInput) {
-	  showPopeToast('Please enter your display name');
+	  showPopeToast('กรุณากรอกชื่อที่แสดง');
 	  return;
 	}
 	const exists = registeredUsers.some(u => u.username === username);
 	if (exists) {
-	  showPopeToast('Username already taken');
+	  showPopeToast('ชื่อผู้ใช้นี้มีอยู่แล้ว');
 	  return;
 	}
 
@@ -2228,7 +2251,7 @@ function handleAuthSubmit() {
 	  username: username,
 	  role: 'user',
 	  password: password,
-	  bio: `Hello! I am ${nameInput} on POPE System. 🚀`,
+	  bio: `Hello! I am ${nameInput} ✨`,
 	  avatar: `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80`,
 	  followers: 0,
 	  following: 0,
@@ -2243,44 +2266,48 @@ function handleAuthSubmit() {
 	if (currentPopeUser) saveUserPersonalData(currentPopeUser);
 	currentPopeUser = newUser;
 	loadUserPersonalData(currentPopeUser);
-	logWalletTx('Welcome bonus (P1 · ถอนไม่ได้)', 100, 'P1');
+	logWalletTx('โบนัสต้อนรับ (Point เติม)', 100, 'P1');
 	playPopeTone(784, 0.12);
 	hapticNotify('success');
-	showPopeToast('Registration successful! +100 Point แบบที่ 1 (ถอนไม่ได้)');
+	showPopeToast('สมัครสมาชิกสำเร็จ! รับโบนัส 100 Points');
 	savePopeData();
+	sendActionToBot('user_registered', { username: newUser.username, name: newUser.name });
+	await syncStateToBotBackend('user_registered', { user: newUser });
 	checkAuthStatus();
   } else {
 	let user = registeredUsers.find(u => u.username === username && u.password === password);
 	if (!user) {
-	  showPopeToast('Invalid username or password');
+	  showPopeToast('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
 	  return;
 	}
 	normalizeUserPointBalances(user);
-	if (!user.role) user.role = (user.username === 'pope_creator') ? 'admin' : 'user';
+	user.role = 'user';
 	if (currentPopeUser) saveUserPersonalData(currentPopeUser);
 	currentPopeUser = user;
 	if (!currentPopeUser.personal) currentPopeUser.personal = createEmptyUserPersonal();
 	loadUserPersonalData(currentPopeUser);
-	isAdminUnlocked = false;
 	playPopeTone(660, 0.08);
 	hapticNotify('success');
-	showPopeToast(`Welcome back, @${user.username} (${getUserRoleLabel(user)})!`);
+	showPopeToast(`ยินดีต้อนรับ @${user.username}`);
 	savePopeData();
+	await pullRealtimeStateFromBot();
 	checkAuthStatus();
   }
 }
 
 function popeLogout() {
-  showPopeConfirm('ออกจากระบบ POPE?', () => {
+  showPopeConfirm('ออกจากระบบ?', () => {
 	if (currentPopeUser) saveUserPersonalData(currentPopeUser);
 	currentPopeUser = null;
 	loadUserPersonalData(null);
-	isAdminUnlocked = false;
+	adminSessionToken = '';
+	isVerifiedAdmin = false;
+	syncAdminVisibility();
 	savePopeData();
 	closePopeProfileModal();
 	checkAuthStatus();
 	switchAuthMode('login');
-	showPopeToast('Logged out successfully');
+	showPopeToast('ออกจากระบบแล้ว');
   });
 }
 
@@ -2299,7 +2326,7 @@ function renderFileCardHTML(fileObj, compact = false) {
 	<div class="text-[9px] text-zinc-400 font-mono mt-0.5 truncate max-w-[220px]">${safeSize} · ${safeMime}</div>
 	${!compact && hasUrl ? `<a href="${safeUrl}" download="${safeName}" class="mt-3 px-3.5 py-1.5 rounded-full bg-white text-black text-[11px] font-bold hover:bg-zinc-200 transition inline-flex items-center gap-1.5">
 	  <i data-lucide="download" class="w-3.5 h-3.5"></i> Download File
-	</a>` : (!compact ? `<span class="mt-2 text-[10px] text-zinc-500">ไฟล์ชั่วคราวอยู่นอกเซสชันนี้</span>` : '')}
+	</a>` : ''}
   </div>`;
 }
 
@@ -2312,9 +2339,8 @@ const filtered = getFilteredPosts();
 if (!filtered.length) {
   feed.innerHTML = `<div class="w-full h-full flex flex-col items-center justify-center text-center p-8 space-y-3">
 	<div class="text-4xl">📭</div>
-	<p class="text-sm text-zinc-400 font-medium">No posts to show</p>
-	<p class="text-xs text-zinc-600">${searchQuery ? `No posts matching "${escapePopeHtml(searchQuery)}"` : 'Try switching feed tab or follow more creators'}</p>
-	<button onclick="${searchQuery ? 'clearFeedSearchFilter()' : "setFeedMode('foryou')"}" class="mt-2 px-4 py-2 bg-white text-black text-xs font-bold rounded-full">${searchQuery ? 'Clear Search' : 'Back to For You'}</button>
+	<p class="text-sm text-zinc-400 font-medium">ไม่มีโพสต์ในหมวดนี้</p>
+	<button onclick="${searchQuery ? 'clearFeedSearchFilter()' : "setFeedMode('foryou')"}" class="mt-2 px-4 py-2 bg-white text-black text-xs font-bold rounded-full">${searchQuery ? 'ล้างการค้นหา' : 'กลับหน้า For You'}</button>
   </div>`;
   return;
 }
@@ -2328,7 +2354,7 @@ const isOverlayHidden = !!hidePopeOverlaysState[post.id];
 
 let media = '';
 if (post.type === 'code') {
-media = `<div class="w-full h-full relative media-container" ondblclick="handlePopeDoubleTap(event, ${post.id})"> <iframe srcdoc="${escapePopeAttr(post.code)}" sandbox="allow-scripts allow-modals" class="w-full h-full border-0 bg-white pointer-events-auto"></iframe> <button onclick="toggleHidePopeOverlay(${post.id})" class="absolute top-16 right-3 z-20 bg-black/80 hover:bg-black backdrop-blur-md text-white text-[10px] px-2.5 py-1 rounded-full font-mono flex items-center gap-1 shadow-md border border-zinc-700 transition"> <i data-lucide="${isOverlayHidden ? 'eye' : 'eye-off'}" class="w-3 h-3 text-zinc-300"></i> <span>${isOverlayHidden ? 'Show POPE UI' : 'Hide POPE UI'}</span> </button> </div>`;
+media = `<div class="w-full h-full relative media-container" ondblclick="handlePopeDoubleTap(event, ${post.id})"> <iframe srcdoc="${escapePopeAttr(post.code)}" sandbox="allow-scripts allow-modals" class="w-full h-full border-0 bg-white pointer-events-auto"></iframe> <button onclick="toggleHidePopeOverlay(${post.id})" class="absolute top-16 right-3 z-20 bg-black/80 hover:bg-black backdrop-blur-md text-white text-[10px] px-2.5 py-1 rounded-full font-mono flex items-center gap-1 shadow-md border border-zinc-700 transition"> <i data-lucide="${isOverlayHidden ? 'eye' : 'eye-off'}" class="w-3 h-3 text-zinc-300"></i> <span>${isOverlayHidden ? 'Show UI' : 'Hide UI'}</span> </button> </div>`;
 } else if (post.type === 'image' && post.mediaUrls?.length === 1) {
 media = `<div class="w-full h-full media-container" ondblclick="handlePopeDoubleTap(event, ${post.id})"><img src="${post.mediaUrls[0]}" class="w-full h-full object-cover" alt="" loading="lazy"></div>`;
 } else if (post.type === 'image' && post.mediaUrls?.length > 1) {
@@ -2366,10 +2392,8 @@ el.innerHTML = `
 
 <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/90 pointer-events-none ${overlayClass}"></div>
 
-<!-- BOTTOM INTEGRATED CONTAINER -->
 <div class="absolute inset-x-0 bottom-0 z-20 p-3.5 pb-4 flex flex-col space-y-2.5 pointer-events-auto ${overlayClass}">
 
-<!-- PROFILE, CAPTION & MUSIC INFO -->
 <div class="flex flex-col space-y-1 px-1">
 <div class="flex items-center gap-2">
 <div class="relative cursor-pointer" onclick="openUserProfileModal('${post.username}')">
@@ -2391,7 +2415,6 @@ ${post.originalUsername ? `<div class="text-[10px] text-purple-300 font-medium f
 </div>
 </div>
 
-<!-- ACTION BUTTONS ROW -->
 <div class="flex items-center justify-around bg-black/85 backdrop-blur-md rounded-xl p-1.5 border border-zinc-800 shadow-lg">
 <button onclick="togglePopeLike(${post.id})" class="flex items-center gap-1 text-white active:scale-110 transition px-1.5 py-1">
 <i data-lucide="heart" class="w-3.5 h-3.5 ${post.isLiked ? 'text-white fill-white' : 'text-zinc-400'}"></i>
@@ -2465,6 +2488,7 @@ return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g
 
 function openPopeProfileModal() {
   reopenProfileAfterTopup = false;
+  syncAdminVisibility();
   renderPopeProfileData();
   renderPopeMyPostsList();
   switchPopeTab('profile');
@@ -2481,11 +2505,15 @@ function switchPopeTab(tab) {
   const targetTab = (tab === 'admin' && !canAdmin) ? 'profile' : tab;
 
   const isProfile = targetTab === 'profile';
-  const isAdmin = targetTab === 'admin';
+  const isAdmin = targetTab === 'admin' && canAdmin;
   const isSettings = targetTab === 'settings';
 
   document.getElementById('pope-profile-tab-content').classList.toggle('hidden', !isProfile);
-  document.getElementById('pope-admin-tab-content').classList.toggle('hidden', !isAdmin);
+  const adminContent = document.getElementById('pope-admin-tab-content');
+  if (adminContent) {
+	adminContent.classList.toggle('hidden', !isAdmin);
+	if (!isAdmin) adminContent.innerHTML = '';
+  }
   document.getElementById('pope-settings-tab-content').classList.toggle('hidden', !isSettings);
 
   document.getElementById('pope-tab-profile-btn').className = isProfile
@@ -2493,7 +2521,7 @@ function switchPopeTab(tab) {
 	: "text-xs font-bold text-zinc-400 hover:text-white border-b-2 border-transparent pb-1 transition";
 
   const adminBtn = document.getElementById('pope-tab-admin-btn');
-  if (adminBtn) {
+  if (adminBtn && canAdmin) {
 	adminBtn.className = isAdmin
 	  ? "text-xs font-bold text-amber-300 border-b-2 border-amber-400 pb-1 transition flex items-center gap-1"
 	  : "text-xs font-bold text-amber-400/80 hover:text-amber-300 border-b-2 border-transparent pb-1 transition flex items-center gap-1";
@@ -2508,41 +2536,84 @@ function switchPopeTab(tab) {
 }
 
 function renderAdminConsole() {
-  if (!isCurrentUserAdmin()) return;
+  const adminContent = document.getElementById('pope-admin-tab-content');
+  if (!adminContent) return;
+  if (!isCurrentUserAdmin()) {
+	adminContent.innerHTML = '';
+	adminContent.classList.add('hidden');
+	return;
+  }
+
   const totalUsers = registeredUsers.length;
   const pendingSlips = topupRequests.filter(r => r.status === 'pending').length + withdrawRequests.filter(w => w.status === 'pending').length;
   const totalP1 = registeredUsers.reduce((sum, u) => sum + getTopupPoints(u), 0);
   const totalP2 = registeredUsers.reduce((sum, u) => sum + getEarnedPoints(u), 0);
 
-  const idEl = document.getElementById('pope-admin-console-identity');
-  if (idEl) idEl.innerText = `@${currentPopeUser?.username || 'admin'} · Full Moderation & Slip Ops`;
+  const usersHtml = registeredUsers.map(u => `
+	<div onclick="closePopeProfileModal(); openUserProfileModal('${escapePopeAttr(u.username)}')" class="flex items-center justify-between p-2 rounded-xl bg-zinc-900/70 border border-zinc-800 hover:border-zinc-600 cursor-pointer transition text-[11px]">
+	  <div class="flex items-center gap-2 min-w-0">
+		<img src="${escapePopeAttr(u.avatar)}" class="w-6 h-6 rounded-full object-cover border border-zinc-700" alt="">
+		<div class="truncate">
+		  <span class="font-semibold text-white">${escapePopeHtml(u.name)}</span>
+		  <span class="text-zinc-500 font-mono text-[10px]">@${escapePopeHtml(u.username)}</span>
+		</div>
+	  </div>
+	  <div class="flex items-center gap-1.5 flex-shrink-0">
+		<span class="font-mono text-[10px] text-yellow-400">เติม:${getTopupPoints(u)}p</span>
+		<span class="font-mono text-[10px] text-emerald-400">ถอนได้:${getEarnedPoints(u)}p</span>
+	  </div>
+	</div>
+  `).join('');
 
-  document.getElementById('pope-admin-metric-users').innerText = formatPopeNumber(totalUsers);
-  document.getElementById('pope-admin-metric-pending').innerText = pendingSlips;
-  document.getElementById('pope-admin-metric-posts').innerText = `${formatPopeNumber(totalP1)}p`;
-  document.getElementById('pope-admin-metric-points').innerText = `${formatPopeNumber(totalP2)}p`;
-
-  const dirEl = document.getElementById('pope-admin-users-directory');
-  if (dirEl) {
-	dirEl.innerHTML = registeredUsers.map(u => {
-	  const roleTag = getUserRoleLabel(u);
-	  const isAdminRow = roleTag === 'ADMIN';
-	  return `<div onclick="closePopeProfileModal(); openUserProfileModal('${escapePopeAttr(u.username)}')" class="flex items-center justify-between p-2 rounded-xl bg-zinc-900/70 border border-zinc-800 hover:border-zinc-600 cursor-pointer transition text-[11px]">
-		<div class="flex items-center gap-2 min-w-0">
-		  <img src="${escapePopeAttr(u.avatar)}" class="w-6 h-6 rounded-full object-cover border border-zinc-700" alt="">
-		  <div class="truncate">
-			<span class="font-semibold text-white">${escapePopeHtml(u.name)}</span>
-			<span class="text-zinc-500 font-mono text-[10px]">@${escapePopeHtml(u.username)}</span>
+  adminContent.innerHTML = `
+	<div class="p-3.5 rounded-2xl bg-gradient-to-r from-amber-950/50 via-zinc-900 to-zinc-900 border border-amber-500/30 space-y-2">
+	  <div class="flex items-center justify-between">
+		<div class="flex items-center gap-2">
+		  <i data-lucide="shield-check" class="w-4 h-4 text-amber-400"></i>
+		  <div>
+			<div class="text-xs font-bold text-white">แผงจัดการระบบ</div>
+			<div class="text-[10px] text-amber-300/90 font-mono">Bot Chat: ${TELEGRAM_BOT_CONFIG.chatId}</div>
 		  </div>
 		</div>
-		<div class="flex items-center gap-1.5 flex-shrink-0">
-		  <span class="font-mono text-[10px] text-yellow-400">P1:${getTopupPoints(u)}p</span>
-		  <span class="font-mono text-[10px] text-emerald-400">P2:${getEarnedPoints(u)}p</span>
-		  <span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold ${isAdminRow ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-zinc-800 text-zinc-400'}">${roleTag}</span>
-		</div>
-	  </div>`;
-	}).join('');
-  }
+		<span class="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-[9px] font-mono font-bold">ADMIN</span>
+	  </div>
+	</div>
+
+	<div class="grid grid-cols-2 gap-2">
+	  <div class="p-3 rounded-xl bg-zinc-900/80 border border-zinc-800">
+		<div class="text-[10px] text-zinc-400 uppercase font-semibold">สมาชิกทั้งหมด</div>
+		<div class="text-base font-bold font-mono text-white mt-0.5">${formatPopeNumber(totalUsers)}</div>
+	  </div>
+	  <div class="p-3 rounded-xl bg-zinc-900/80 border border-zinc-800">
+		<div class="text-[10px] text-zinc-400 uppercase font-semibold">รอดำเนินการ</div>
+		<div class="text-base font-bold font-mono text-amber-400 mt-0.5">${pendingSlips}</div>
+	  </div>
+	  <div class="p-3 rounded-xl bg-zinc-900/80 border border-zinc-800">
+		<div class="text-[10px] text-zinc-400 uppercase font-semibold">Point เติมรวม</div>
+		<div class="text-base font-bold font-mono text-yellow-400 mt-0.5">${formatPopeNumber(totalP1)}p</div>
+	  </div>
+	  <div class="p-3 rounded-xl bg-zinc-900/80 border border-zinc-800">
+		<div class="text-[10px] text-zinc-400 uppercase font-semibold">Point ถอนได้รวม</div>
+		<div class="text-base font-bold font-mono text-emerald-400 mt-0.5">${formatPopeNumber(totalP2)}p</div>
+	  </div>
+	</div>
+
+	<div class="grid grid-cols-2 gap-2">
+	  <button onclick="openAdminSlipQueueDirectly()" class="p-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-black text-xs font-bold flex items-center justify-center gap-1.5 transition">
+		<i data-lucide="file-check-2" class="w-4 h-4"></i>
+		<span>ตรวจสลิป & ถอน</span>
+	  </button>
+	  <button onclick="openPopeLeaderboard()" class="p-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white border border-zinc-700 text-xs font-bold flex items-center justify-center gap-1.5 transition">
+		<i data-lucide="users" class="w-4 h-4 text-sky-400"></i>
+		<span>ดูอันดับผู้ใช้</span>
+	  </button>
+	</div>
+
+	<div class="space-y-1.5">
+	  <div class="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">ยอด Point ของสมาชิก</div>
+	  <div class="space-y-1.5 max-h-48 overflow-y-auto no-scrollbar">${usersHtml}</div>
+	</div>
+  `;
 }
 
 function togglePopePreference(key, enabled) {
@@ -2553,7 +2624,7 @@ function togglePopePreference(key, enabled) {
 	playPopeTone(740, 0.08);
 	hapticImpact('light');
   }
-  showPopeToast(`${key === 'notifications' ? 'การแจ้งเตือน' : 'เสียง & Haptic'}: ${enabled ? 'เปิด' : 'ปิด'}`);
+  showPopeToast(`${key === 'notifications' ? 'การแจ้งเตือน' : 'เสียง & การสั่น'}: ${enabled ? 'เปิด' : 'ปิด'}`);
 }
 
 async function handleAvatarFileUpload(e) {
@@ -2564,9 +2635,9 @@ async function handleAvatarFileUpload(e) {
 	  ? await readFileAsDataUrl(file)
 	  : URL.createObjectURL(file);
 	document.getElementById('pope-setting-avatar-input').value = url;
-	showPopeToast(`เลือกไฟล์ "${file.name}" เป็นรูปโปรไฟล์แล้ว`);
+	showPopeToast(`เลือก "${file.name}" แล้ว`);
   } catch (_) {
-	showPopeToast('ไม่สามารถอ่านไฟล์รูปภาพได้');
+	showPopeToast('ไม่สามารถอ่านไฟล์ได้');
   }
 }
 
@@ -2592,10 +2663,9 @@ function calculateUserAnalytics(username) {
 function renderPopeProfileData() {
   if (!currentPopeUser) return;
   normalizeUserPointBalances(currentPopeUser);
+  syncAdminVisibility();
 
-  const isAdmin = isCurrentUserAdmin();
-  const p1 = getTopupPoints(currentPopeUser);
-  const p2 = getEarnedPoints(currentPopeUser);
+  const canManage = isCurrentUserAdmin();
 
   document.getElementById('pope-header-avatar').src = currentPopeUser.avatar;
   document.getElementById('pope-header-username').innerText = `@${currentPopeUser.username}`;
@@ -2609,34 +2679,10 @@ function renderPopeProfileData() {
 
   document.getElementById('pope-comment-user-avatar').src = currentPopeUser.avatar;
   document.getElementById('pope-card-name').querySelector('span').innerText = currentPopeUser.name;
-
-  const rolePill = document.getElementById('pope-account-role-pill');
-  if (rolePill) {
-	rolePill.innerText = isAdmin ? 'ADMIN ROLE · SYSTEM OPERATOR' : 'USER ROLE · PERSONAL ACCOUNT';
-	rolePill.className = isAdmin
-	  ? 'mb-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider border bg-amber-500/15 text-amber-300 border-amber-500/40'
-	  : 'mb-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider border bg-zinc-800 text-zinc-300 border-zinc-700';
-  }
-
-  const adminTabBtn = document.getElementById('pope-tab-admin-btn');
-  if (adminTabBtn) {
-	adminTabBtn.classList.toggle('hidden', !isAdmin);
-	adminTabBtn.classList.toggle('flex', isAdmin);
-  }
   
   const verifiedWrap = document.getElementById('pope-card-verified-badge');
   if (currentPopeUser.isSubscribed) verifiedWrap.classList.remove('hidden');
   else verifiedWrap.classList.add('hidden');
-
-  const tgBadge = document.getElementById('pope-tg-linked-badge');
-  if (tgBadge) {
-	if (currentPopeUser.telegramId) {
-	  tgBadge.classList.remove('hidden');
-	  tgBadge.innerText = `Telegram ID: ${currentPopeUser.telegramId}`;
-	} else {
-	  tgBadge.classList.add('hidden');
-	}
-  }
 
   document.getElementById('pope-card-handle').innerText = `@${currentPopeUser.username}`;
   document.getElementById('pope-card-bio').innerText = currentPopeUser.bio;
@@ -2645,19 +2691,19 @@ function renderPopeProfileData() {
   const subBadge = document.getElementById('pope-subscription-badge');
   if (currentPopeUser.isSubscribed) {
 	subBadge.className = "my-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-blue-950/60 text-blue-400 border border-blue-500/40";
-	subBadge.innerHTML = `<i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> POPE Premium Subscriber (Verified)`;
+	subBadge.innerHTML = `<i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> POPE Monthly (Verified)`;
   } else {
 	subBadge.className = "my-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 bg-zinc-900 text-zinc-400 border border-zinc-800";
-	subBadge.innerHTML = `<i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Standard Free Account`;
+	subBadge.innerHTML = `<i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Standard Account`;
   }
 
   const subBtn = document.getElementById('pope-subscribe-btn');
   if (currentPopeUser.isSubscribed) {
 	subBtn.className = "w-full mt-1 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 border border-zinc-700";
-	subBtn.innerHTML = `<i data-lucide="x-circle" class="w-4 h-4"></i> ยกเลิกการสมัครรายเดือน (Cancel POPE Premium)`;
+	subBtn.innerHTML = `<i data-lucide="x-circle" class="w-4 h-4"></i> ยกเลิกการสมัครรายเดือน`;
   } else {
 	subBtn.className = "w-full mt-1 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/40";
-	subBtn.innerHTML = `<i data-lucide="zap" class="w-4 h-4"></i> สมัครรายเดือน (50 Points / ฿99) เพื่อรับตรา Verified`;
+	subBtn.innerHTML = `<i data-lucide="zap" class="w-4 h-4"></i> สมัครรายเดือน (50 Points) รับตรา Verified`;
   }
 
   document.getElementById('pope-setting-name-input').value = currentPopeUser.name;
@@ -2666,8 +2712,6 @@ function renderPopeProfileData() {
   document.getElementById('pope-setting-avatar-input').value = currentPopeUser.avatar;
   document.getElementById('pope-setting-notif-toggle').checked = !!popeSettings.notifications;
   document.getElementById('pope-setting-sound-toggle').checked = !!popeSettings.sound;
-  const botInput = document.getElementById('pope-setting-bot-username-input');
-  if (botInput) botInput.value = telegramBotUsername ? `@${telegramBotUsername}` : '';
 
   const stats = calculateUserAnalytics(currentPopeUser.username);
   document.getElementById('pope-stat-posts-count').innerText = stats.totalPosts;
@@ -2679,7 +2723,7 @@ function renderPopeProfileData() {
   renderWalletHistory();
   updateCheckinUI();
   updateNotifBadge();
-  if (isAdmin) renderAdminConsole();
+  if (canManage) renderAdminConsole();
   lucide.createIcons();
 }
 
@@ -2694,29 +2738,30 @@ function togglePopeSubscription() {
 	  btn.dataset.busy = '1';
 	  setTimeout(() => { btn.dataset.busy = '0'; }, 1500);
 	}
-	if (!safeDeductPoints(currentPopeUser.username, 50, 'POPE Premium monthly')) return;
+	if (!safeDeductPoints(currentPopeUser.username, 50, 'สมัคร POPE Monthly')) return;
 	currentPopeUser.isSubscribed = true;
 	const u = registeredUsers.find(x => x.username === currentPopeUser.username);
 	if (u) u.isSubscribed = true;
 	playPopeTone(880, 0.14);
 	hapticNotify('success');
-	pushNotif('system', 'Subscribed to POPE Premium — Verified badge unlocked');
+	pushNotif('system', 'สมัคร POPE Monthly สำเร็จ — ได้รับตรา Verified แล้ว');
 	savePopeData();
+	sendActionToBot('subscription_updated', { subscribed: true });
 	syncStateToBotBackend('subscription_updated', { subscribed: true });
 	renderPopeProfileData();
 	renderPopeFeed();
-	showPopeToast('สมัคร POPE Premium สำเร็จ! -50 Points + ตรา Verified');
+	showPopeToast('สมัคร POPE Monthly สำเร็จ! -50 Points');
   } else {
-	showPopeConfirm('ยกเลิก POPE Premium? (ไม่คืน Points)', () => {
+	showPopeConfirm('ยกเลิกการสมัครรายเดือน?', () => {
 	  currentPopeUser.isSubscribed = false;
 	  const u = registeredUsers.find(x => x.username === currentPopeUser.username);
 	  if (u) u.isSubscribed = false;
-	  pushNotif('system', 'POPE Premium cancelled');
+	  pushNotif('system', 'ยกเลิกการสมัครรายเดือนแล้ว');
 	  savePopeData();
 	  syncStateToBotBackend('subscription_updated', { subscribed: false });
 	  renderPopeProfileData();
 	  renderPopeFeed();
-	  showPopeToast('ยกเลิกการสมัครสมาชิกรายเดือนเรียบร้อยแล้ว');
+	  showPopeToast('ยกเลิกเรียบร้อยแล้ว');
 	});
   }
 }
@@ -2729,7 +2774,7 @@ function renderAnalyticsHTML(stats) {
   return `
 	<div class="p-3 bg-zinc-900/40 border border-zinc-800 rounded-xl space-y-2">
 	  <div class="flex justify-between items-center text-[10px] text-zinc-400 font-bold uppercase tracking-wider">
-		<span>ข้อมูลสถิติการใช้งาน (Usage & Analytics)</span>
+		<span>สถิติการใช้งาน</span>
 		<span class="text-zinc-500 font-mono">${stats.totalComments} Comments</span>
 	  </div>
 	  <div class="grid grid-cols-4 gap-1.5 text-center text-xs">
@@ -2765,7 +2810,7 @@ function openUserProfileModal(username) {
 	name: username,
 	username: username,
 	role: 'user',
-	bio: "POPE Social Community User ✨",
+	bio: "POPE Member ✨",
 	avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80",
 	followers: 420,
 	following: 180,
@@ -2777,8 +2822,7 @@ function openUserProfileModal(username) {
   if (user.isSubscribed) verifiedBadge.classList.remove('hidden');
   else verifiedBadge.classList.add('hidden');
 
-  const roleSuffix = getUserRoleLabel(user) === 'ADMIN' ? ' · ADMIN' : '';
-  document.getElementById('pope-other-card-handle').innerText = `@${user.username}${roleSuffix}`;
+  document.getElementById('pope-other-card-handle').innerText = `@${user.username}`;
   document.getElementById('pope-other-card-bio').innerText = user.bio;
   document.getElementById('pope-other-card-avatar').src = user.avatar;
 
@@ -2802,7 +2846,7 @@ function openUserProfileModal(username) {
   document.getElementById('pope-other-posts-badge').innerText = userPosts.length;
 
   if (userPosts.length === 0) {
-	listContainer.innerHTML = '<div class="text-center text-zinc-500 text-xs py-4 font-medium">ผู้ใช้นี้ยังไม่มีโพสต์ (No posts yet)</div>';
+	listContainer.innerHTML = '<div class="text-center text-zinc-500 text-xs py-4 font-medium">ผู้ใช้นี้ยังไม่มีโพสต์</div>';
   } else {
 	listContainer.innerHTML = userPosts.map(p => `
 	  <div onclick="inspectPopePostDetail(${p.id})" class="flex items-center justify-between p-2 bg-zinc-900/80 rounded-xl border border-zinc-800/80 hover:border-zinc-600 transition cursor-pointer group">
@@ -2922,13 +2966,13 @@ function savePopeProfileSettings() {
   const avatar = document.getElementById('pope-setting-avatar-input').value.trim();
 
   if (!name || !newUsername) {
-	showPopeToast('Name and Username cannot be empty');
+	showPopeToast('กรุณากรอกชื่อและชื่อผู้ใช้');
 	return;
   }
 
   const taken = registeredUsers.some(u => u.username === newUsername && u.username !== currentPopeUser.username);
   if (taken) {
-	showPopeToast('Username already taken');
+	showPopeToast('ชื่อผู้ใช้นี้มีอยู่แล้ว');
 	return;
   }
 
@@ -2965,7 +3009,7 @@ function savePopeProfileSettings() {
 	...currentPopeUser,
 	name,
 	username: newUsername,
-	bio: bio || 'No POPE bio available',
+	bio: bio || 'POPE Member ✨',
 	avatar: newAvatar
   });
   if (idx !== -1) {
@@ -2973,12 +3017,12 @@ function savePopeProfileSettings() {
   }
 
   savePopeData();
-  syncStateToBotBackend('profile_updated', { name, username: newUsername, bio });
+  syncStateToBotBackend('profile_updated', { oldUsername, name, username: newUsername, bio });
   hapticNotify('success');
   renderPopeProfileData();
   renderPopeFeed();
   switchPopeTab('profile');
-  showPopeToast('บันทึกข้อมูล POPE เรียบร้อย!');
+  showPopeToast('บันทึกเรียบร้อยแล้ว!');
 }
 
 function renderPopeMyPostsList() {
@@ -3029,16 +3073,17 @@ function deletePopePost(id) {
   showPopeConfirm('ลบโพสต์นี้ถาวร?', () => {
 	popePosts = popePosts.filter(p => p.id !== id);
 	savePopeData();
+	syncStateToBotBackend('post_deleted', { postId: id });
 	renderPopeFeed();
 	renderPopeMyPostsList();
 	renderPopeProfileData();
-	showPopeToast('ลบโพสต์ POPE เรียบร้อยแล้ว');
+	showPopeToast('ลบโพสต์เรียบร้อยแล้ว');
   });
 }
 
 function openPopeCreateModal() {
   if (!currentPopeUser) {
-	showPopeToast('Please sign in first');
+	showPopeToast('กรุณาเข้าสู่ระบบก่อน');
 	checkAuthStatus();
 	return;
   }
@@ -3126,12 +3171,7 @@ async function handlePopeFileUpload(e, tabType) {
 	files: processed
   };
   renderPopeLivePreview();
-  const nonPersisted = processed.filter(f => !f.persisted).length;
-  if (nonPersisted > 0) {
-	showPopeToast(`อัปโหลด ${processed.length} ไฟล์แล้ว (ไฟล์ > 1.5MB จะใช้ในเซสชันนี้)`);
-  } else {
-	showPopeToast(`อัปโหลด ${processed.length} ไฟล์พร้อมพรีวิวแล้ว`);
-  }
+  showPopeToast(`อัปโหลด ${processed.length} ไฟล์แล้ว`);
 }
 
 function clearPopePreview() {
@@ -3147,13 +3187,13 @@ function renderPopeLivePreview() {
 const el = document.getElementById('pope-live-preview');
 const metaEl = document.getElementById('pope-media-meta-info');
 if (!popePreviewData) {
-el.innerHTML = '<div class="w-full h-full flex items-center justify-center text-xs text-zinc-600 font-medium">No POPE preview data</div>';
+el.innerHTML = '<div class="w-full h-full flex items-center justify-center text-xs text-zinc-600 font-medium">No preview</div>';
 if (metaEl) metaEl.innerText = '';
 return;
 }
 if (popePreviewData.type === 'code') {
 el.innerHTML = `<iframe srcdoc="${escapePopeAttr(popePreviewData.code)}" sandbox="allow-scripts" class="w-full h-full border-0 bg-white"></iframe>`;
-if (metaEl) metaEl.innerText = `Code snippet · ${popePreviewData.code.length} chars`;
+if (metaEl) metaEl.innerText = `Code · ${popePreviewData.code.length} chars`;
 } else if (popePreviewData.type === 'image') {
 const f0 = popePreviewData.files[0];
 el.innerHTML = `<img src="${escapePopeAttr(f0.url)}" class="w-full h-full object-cover" alt="">`;
@@ -3181,7 +3221,7 @@ lucide.createIcons();
 
 async function submitPopePost() {
 if (!currentPopeUser) {
-  showPopeToast('Please sign in first');
+  showPopeToast('กรุณาเข้าสู่ระบบก่อน');
   checkAuthStatus();
   return;
 }
@@ -3190,11 +3230,11 @@ const allowMix = document.getElementById('pope-mix-allow-toggle').checked;
 const mixPrice = Math.max(0, parseInt(document.getElementById('pope-mix-price-input').value) || 0);
 
 if (!popePreviewData) {
-showPopeToast('Please enter POPE content before posting');
+showPopeToast('กรุณาเพิ่มเนื้อหาก่อนโพสต์');
 return;
 }
 if (popePreviewData.type === 'url' && !isValidPopeUrl(popePreviewData.url)) {
-showPopeToast('Invalid POPE URL format');
+showPopeToast('รูปแบบลิงก์ไม่ถูกต้อง');
 return;
 }
 
@@ -3224,14 +3264,14 @@ if (window._mixingFromId) {
   const feeTo = window._mixingFeeTo || window._mixingFromUser;
   if (fee > 0 && feeTo) {
 	if (getTotalSpendablePoints(currentPopeUser) < fee) {
-	  showPopeToast(`แต้มไม่พอสำหรับ Remix! ต้องการ ${fee}p (มี ${getTotalSpendablePoints(currentPopeUser)}p)`);
+	  showPopeToast(`Point ไม่พอสำหรับ Mix! ต้องการ ${fee}p`);
 	  return;
 	}
 	if (!transferPoints(currentPopeUser.username, feeTo, fee, 'mix')) {
-	  showPopeToast('แต้มไม่พอ — ไม่สามารถ publish remix ได้');
+	  showPopeToast('Point ไม่พอ');
 	  return;
 	}
-	logWalletTx(`Remix @${feeTo} (เข้า P2 ผู้สร้าง)`, -fee, 'P1');
+	logWalletTx(`Mix @${feeTo}`, -fee, 'P1');
   }
   const orig = popePosts.find(x => x.id === window._mixingFromId);
   if (orig) orig.mixCount = (orig.mixCount || 0) + 1;
@@ -3262,7 +3302,8 @@ if (popePreviewData.type === 'code') {
 
 popePosts.unshift(newPost);
 savePopeData();
-await syncStateToBotBackend('post_created', { postId: newPost.id, type: newPost.type, caption: newPost.caption });
+sendActionToBot('post_created', { postId: newPost.id, type: newPost.type, caption: newPost.caption });
+await syncStateToBotBackend('post_created', { post: newPost });
 playPopeTone(784, 0.12);
 hapticNotify('success');
 renderPopeFeed();
@@ -3270,7 +3311,7 @@ renderPopeProfileData();
 closePopeCreateModal();
 document.getElementById('pope-caption-input').value = '';
 clearPopePreview();
-showPopeToast('POPE Post published successfully!');
+showPopeToast('เผยแพร่โพสต์เรียบร้อย!');
 document.getElementById('pope-feed').scrollTop = 0;
 }
 
@@ -3283,7 +3324,7 @@ function isPostBookmarkedByMe(postId) { return bookmarkedPostIds.has(postId); }
 
 function togglePopeLike(id) {
   if (!currentPopeUser) {
-	showPopeToast('Please sign in first');
+	showPopeToast('กรุณาเข้าสู่ระบบก่อน');
 	checkAuthStatus();
 	return;
   }
@@ -3344,7 +3385,7 @@ function handlePopeDoubleTap(e, id) {
 
 function togglePopeBookmark(id) {
   if (!currentPopeUser) {
-	showPopeToast('Please sign in first');
+	showPopeToast('กรุณาเข้าสู่ระบบก่อน');
 	checkAuthStatus();
 	return;
   }
@@ -3354,11 +3395,11 @@ function togglePopeBookmark(id) {
   if (bookmarkedPostIds.has(id)) {
 	bookmarkedPostIds.delete(id);
 	p.isBookmarked = false;
-	showPopeToast('Removed from POPE bookmarks');
+	showPopeToast('นำออกจากรายการที่บันทึกแล้ว');
   } else {
 	bookmarkedPostIds.add(id);
 	p.isBookmarked = true;
-	showPopeToast('Saved to POPE bookmarks');
+	showPopeToast('บันทึกโพสต์แล้ว');
   }
   savePopeData();
   renderPopeFeed();
@@ -3368,16 +3409,16 @@ function mixPopePost(id) {
 const p = popePosts.find(x => x.id === id);
 if (!p) return;
 if (!currentPopeUser) {
-  showPopeToast('Please sign in first');
+  showPopeToast('กรุณาเข้าสู่ระบบก่อน');
   checkAuthStatus();
   return;
 }
 if (blockedUsers.includes(p.username)) {
-  showPopeToast('Cannot mix posts from blocked users');
+  showPopeToast('ไม่สามารถ Mix โพสต์นี้ได้');
   return;
 }
 if (!p.allowMix) {
-  showPopeToast(`เจ้าของโพสต์ (@${p.username}) ปิดไม่อนุญาตให้ POPEmix`);
+  showPopeToast(`@${p.username} ปิดการ Mix โพสต์นี้`);
   return;
 }
 
@@ -3385,7 +3426,7 @@ const isMe = p.username === currentPopeUser.username;
 const fee = (!isMe && p.mixPrice > 0) ? p.mixPrice : 0;
 
 if (fee > 0 && getTotalSpendablePoints(currentPopeUser) < fee) {
-  showPopeToast(`แต้มไม่พอสำหรับ Mix! ต้องการ ${fee} Points (มีรวม: ${getTotalSpendablePoints(currentPopeUser)})`);
+  showPopeToast(`Point ไม่พอสำหรับ Mix! ต้องการ ${fee}p`);
   openTopupModal('pay');
   return;
 }
@@ -3413,9 +3454,9 @@ document.getElementById('pope-caption-input').value = `⚡ POPE Mix from @${p.us
 renderPopeLivePreview();
 openPopeCreateModal();
 if (fee > 0) {
-  showPopeToast(`Remix ready — จะหัก ${fee} Points เมื่อกด Publish`);
+  showPopeToast(`พร้อม Mix (ใช้ ${fee}p เมื่อกด Publish)`);
 } else {
-  showPopeToast('Remix ready — free to publish');
+  showPopeToast('พร้อม Mix');
 }
 }
 
@@ -3425,7 +3466,7 @@ function togglePopeFollow(id) {
   if (p.username === currentPopeUser.username) return;
   hapticImpact('light');
   const nowFollowing = toggleFollowUser(p.username);
-  showPopeToast(nowFollowing ? `Following @${p.username} on POPE` : `Unfollowed @${p.username}`);
+  showPopeToast(nowFollowing ? `Following @${p.username}` : `Unfollowed @${p.username}`);
   renderPopeFeed();
 }
 
@@ -3434,7 +3475,7 @@ activePopeCommentsPostId = id;
 const p = popePosts.find(x => x.id === id);
 if (!p) return;
 hapticImpact('light');
-document.getElementById('pope-comment-count-header').innerText = `POPE Comments (${p.comments.length})`;
+document.getElementById('pope-comment-count-header').innerText = `Comments (${p.comments.length})`;
 renderPopeComments(p.comments);
 togglePopeCommentDrawer(true);
 }
@@ -3454,7 +3495,7 @@ b.classList.add('hidden');
 function renderPopeComments(comments) {
 const c = document.getElementById('pope-comments-list');
 if (!comments.length) {
-c.innerHTML = '<div class="text-center text-zinc-500 text-xs py-8 font-medium">No POPE comments yet. Be the first to comment!</div>';
+c.innerHTML = '<div class="text-center text-zinc-500 text-xs py-8 font-medium">ยังไม่มีคอมเมนต์</div>';
 return;
 }
 c.innerHTML = comments.map(cm => `
@@ -3476,12 +3517,12 @@ e.preventDefault();
 const input = document.getElementById('pope-comment-input');
 const text = input.value.trim();
 if (!currentPopeUser) {
-  showPopeToast('Please sign in first');
+  showPopeToast('กรุณาเข้าสู่ระบบก่อน');
   return;
 }
 if (!text || !activePopeCommentsPostId) return;
 if (text.length > 500) {
-  showPopeToast('Comment too long (max 500)');
+  showPopeToast('ข้อความยาวเกินไป');
   return;
 }
 
@@ -3597,7 +3638,6 @@ function ensurePostDefaults(p) {
   return p;
 }
 
-// Deducts Point Type 1 (top-up) first, then Point Type 2 (earned); credits recipient into Point Type 2 (withdrawable)
 function transferPoints(fromUsername, toUsername, amount, reason) {
   amount = Math.floor(Number(amount) || 0);
   if (amount <= 0) return false;
@@ -3621,7 +3661,7 @@ function transferPoints(fromUsername, toUsername, amount, reason) {
 	if (!Array.isArray(to.personal.walletTransactions)) to.personal.walletTransactions = [];
 	to.personal.walletTransactions.unshift({
 	  id: Date.now() + Math.random(),
-	  label: `รับ ${reason === 'mix' ? 'Mix fee' : 'Gift'} จาก @${fromUsername} (ถอนได้)`,
+	  label: `รับ ${reason === 'mix' ? 'ค่า Mix' : 'ของขวัญ'} จาก @${fromUsername}`,
 	  delta: amount,
 	  bucket: 'P2',
 	  time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -3637,13 +3677,12 @@ function transferPoints(fromUsername, toUsername, amount, reason) {
   }
   if (currentPopeUser && currentPopeUser.username === toUsername && to) {
 	currentPopeUser.earnedBalance = to.earnedBalance;
-	logWalletTx(`รับ ${reason === 'mix' ? 'Mix fee' : 'Gift'} จาก @${fromUsername} (ถอนได้)`, amount, 'P2');
+	logWalletTx(`รับ ${reason === 'mix' ? 'ค่า Mix' : 'ของขวัญ'} จาก @${fromUsername}`, amount, 'P2');
   }
   updateBalanceUI();
   return true;
 }
 
-// Deducts Point Type 1 first, then Point Type 2 (for platform payments like POPE Monthly)
 function safeDeductPoints(username, amount, label) {
   amount = Math.floor(Number(amount) || 0);
   if (amount <= 0) return false;
@@ -3653,7 +3692,7 @@ function safeDeductPoints(username, amount, label) {
 
   const totalAvail = getTotalSpendablePoints(user);
   if (totalAvail < amount) {
-	showPopeToast(`แต้มไม่พอ! ต้องการ ${amount}p (มีรวม ${totalAvail}p)`);
+	showPopeToast(`Point ไม่พอ! ต้องการ ${amount}p`);
 	return false;
   }
 
@@ -3667,8 +3706,8 @@ function safeDeductPoints(username, amount, label) {
 	currentPopeUser.earnedBalance = user.earnedBalance;
   }
   if (label) {
-	if (fromP1 > 0) logWalletTx(`${label} (ใช้ P1)`, -fromP1, 'P1');
-	if (fromP2 > 0) logWalletTx(`${label} (ใช้ P2)`, -fromP2, 'P2');
+	if (fromP1 > 0) logWalletTx(label, -fromP1, 'P1');
+	if (fromP2 > 0) logWalletTx(label, -fromP2, 'P2');
   }
   updateBalanceUI();
   return true;
@@ -3691,7 +3730,7 @@ function updateBalanceUI() {
   if (headerP2) headerP2.innerText = p2;
   if (walletP1) walletP1.innerText = `${p1}p`;
   if (walletP2) walletP2.innerText = `${p2}p`;
-  if (walletTotal) walletTotal.innerText = `รวม ${total}p (P1:${p1} · P2:${p2})`;
+  if (walletTotal) walletTotal.innerText = `รวม ${total}p`;
   if (giftEl) giftEl.innerText = total;
   if (wdAvailEl) wdAvailEl.innerText = `${p2}p`;
 }
@@ -3770,7 +3809,7 @@ function applySearchToFeed() {
   syncSearchBannerUI();
   closePopeSearchModal(true);
   renderPopeFeed();
-  showPopeToast(searchQuery ? `กำลังแสดงผลลัพธ์: "${searchQuery}"` : 'แสดงโพสต์ทั้งหมด');
+  showPopeToast(searchQuery ? `ผลลัพธ์: "${searchQuery}"` : 'แสดงโพสต์ทั้งหมด');
 }
 
 function clearFeedSearchFilter() {
@@ -3846,7 +3885,7 @@ function runPopeSearch() {
 	  </div>
 	`).join('');
   }
-  if (!html) html = '<div class="text-center text-zinc-500 text-xs py-8">No results found</div>';
+  if (!html) html = '<div class="text-center text-zinc-500 text-xs py-8">ไม่พบผลลัพธ์</div>';
   box.innerHTML = html;
 }
 
@@ -3918,11 +3957,11 @@ function markAllNotifsRead() {
 function renderNotifList() {
   const list = document.getElementById('pope-notif-list');
   if (!popeSettings.notifications) {
-	list.innerHTML = '<div class="text-center text-zinc-500 text-xs py-12">การแจ้งเตือนถูกปิดอยู่ในหน้า Settings</div>';
+	list.innerHTML = '<div class="text-center text-zinc-500 text-xs py-12">การแจ้งเตือนถูกปิดอยู่</div>';
 	return;
   }
   if (!popeNotifications.length) {
-	list.innerHTML = '<div class="text-center text-zinc-500 text-xs py-12">No notifications yet</div>';
+	list.innerHTML = '<div class="text-center text-zinc-500 text-xs py-12">ยังไม่มีการแจ้งเตือน</div>';
 	return;
   }
   const icons = { like: 'heart', comment: 'message-circle', follow: 'user-plus', mix: 'sparkles', gift: 'gift', system: 'info' };
@@ -3941,7 +3980,7 @@ function renderNotifList() {
 }
 
 function openPopeGiftModal(postId) {
-  if (!currentPopeUser) { showPopeToast('Please sign in first'); return; }
+  if (!currentPopeUser) { showPopeToast('กรุณาเข้าสู่ระบบก่อน'); return; }
   hapticImpact('light');
   activeGiftPostId = postId;
   document.getElementById('pope-gift-balance').innerText = getTotalSpendablePoints(currentPopeUser);
@@ -3973,43 +4012,39 @@ async function sendPopeGift(amount) {
 	return;
   }
   if (getTotalSpendablePoints(currentPopeUser) < amount) {
-	showPopeToast(`แต้มไม่พอ! ต้องการ ${amount} Points (มีรวม: ${getTotalSpendablePoints(currentPopeUser)})`);
+	showPopeToast(`Point ไม่พอ! ต้องการ ${amount}p`);
 	window._giftBusy = false;
 	return;
   }
   if (!transferPoints(currentPopeUser.username, p.username, amount, 'gift')) {
-	showPopeToast('การส่งของขวัญล้มเหลว');
+	showPopeToast('ส่งของขวัญไม่สำเร็จ');
 	window._giftBusy = false;
 	return;
   }
   p.gifts = (p.gifts || 0) + amount;
-  logWalletTx(`Gift to @${p.username} (เข้า P2 ผู้รับ)`, -amount, 'P1');
+  logWalletTx(`ส่งของขวัญให้ @${p.username}`, -amount, 'P1');
   playPopeTone(987, 0.14, 'triangle');
   hapticNotify('success');
-  pushNotif('gift', `You sent ${amount}p gift to @${p.username} (เข้า P2 ผู้รับ)`);
+  pushNotif('gift', `You sent ${amount}p gift to @${p.username}`);
   savePopeData();
+  sendActionToBot('gift_sent', { postId: p.id, targetUsername: p.username, amount });
   await syncStateToBotBackend('gift_sent', { postId: p.id, targetUsername: p.username, amount });
   renderPopeFeed();
   renderPopeProfileData();
   closePopeGiftModal();
-  showPopeToast(`ส่งของขวัญ ${amount}p ให้ @${p.username} แล้ว (เข้าเป็น P2 ถอนได้)`);
+  showPopeToast(`ส่งของขวัญ ${amount}p ให้ @${p.username} แล้ว`);
 }
 
 function sharePopePost(id) {
   const p = popePosts.find(x => x.id === id);
   if (!p) return;
   hapticImpact('light');
-  const botHandle = telegramBotUsername || '';
-  const deepLink = botHandle ? `https://t.me/${encodeURIComponent(botHandle)}?startapp=post_${p.id}` : '';
-  const text = `Check this POPE post by @${p.username}: ${p.caption}${deepLink ? `\n${deepLink}` : ''}`;
+  const text = `Check this POPE post by @${p.username}: ${p.caption}`;
 
-  if (tgApp && deepLink && typeof tgApp.openTelegramLink === 'function') {
-	const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(deepLink)}&text=${encodeURIComponent(`POPE by @${p.username}: ${p.caption}`)}`;
-	tgApp.openTelegramLink(shareUrl);
-  } else if (navigator.share) {
-	navigator.share({ title: 'POPE', text, url: deepLink || undefined }).catch(() => {});
+  if (navigator.share) {
+	navigator.share({ title: 'POPE', text }).catch(() => {});
   } else if (navigator.clipboard) {
-	navigator.clipboard.writeText(text).then(() => showPopeToast('Copied to clipboard!'));
+	navigator.clipboard.writeText(text).then(() => showPopeToast('คัดลอกลิงก์แล้ว!'));
   } else {
 	showPopeToast('Share: ' + text.slice(0, 40) + '...');
   }
@@ -4017,16 +4052,17 @@ function sharePopePost(id) {
 
 function reportPopeUser() {
   if (!viewingTargetUsername) return;
-  showPopeConfirm('Report @' + viewingTargetUsername + ' for inappropriate content?', () => {
-	showPopeToast('Report submitted. Thank you.');
+  showPopeConfirm('รายงาน @' + viewingTargetUsername + '?', () => {
+	showPopeToast('ส่งรายงานเรียบร้อยแล้ว');
 	pushNotif('system', `You reported @${viewingTargetUsername}`);
+	sendActionToBot('user_reported', { targetUsername: viewingTargetUsername });
 	syncStateToBotBackend('user_reported', { targetUsername: viewingTargetUsername });
   });
 }
 
 function blockPopeUser() {
   if (!viewingTargetUsername) return;
-  showPopeConfirm('Block @' + viewingTargetUsername + '? Their posts will be hidden.', () => {
+  showPopeConfirm('บล็อก @' + viewingTargetUsername + '?', () => {
 	if (!blockedUsers.includes(viewingTargetUsername)) {
 	  blockedUsers.push(viewingTargetUsername);
 	}
@@ -4036,7 +4072,7 @@ function blockPopeUser() {
 	savePopeData();
 	closePopeUserViewModal();
 	renderPopeFeed();
-	showPopeToast('Blocked @' + viewingTargetUsername);
+	showPopeToast('บล็อก @' + viewingTargetUsername + ' แล้ว');
   });
 }
 
@@ -4066,15 +4102,16 @@ async function doDailyCheckin() {
   const bonus = 15 + Math.min(dailyCheckin.streak * 2, 20);
   currentPopeUser.balance = getTopupPoints(currentPopeUser) + bonus;
   syncUserBalance(currentPopeUser.username, currentPopeUser.balance);
-  logWalletTx(`Check-in P1 (streak ${dailyCheckin.streak}) · ถอนไม่ได้`, bonus, 'P1');
+  logWalletTx(`เช็กอินรายวัน (${dailyCheckin.streak}d)`, bonus, 'P1');
   playPopeTone(880, 0.12);
   hapticNotify('success');
-  pushNotif('system', `Daily check-in: +${bonus} Point แบบที่ 1 (streak ${dailyCheckin.streak}d) · ถอนไม่ได้`);
+  pushNotif('system', `เช็กอินรายวัน +${bonus} Points (ต่อเนื่อง ${dailyCheckin.streak} วัน)`);
   savePopeData();
+  sendActionToBot('daily_checkin', { bonus, streak: dailyCheckin.streak });
   await syncStateToBotBackend('daily_checkin', { bonus, streak: dailyCheckin.streak });
   updateCheckinUI();
   renderPopeProfileData();
-  showPopeToast(`+${bonus} Point แบบที่ 1! Streak: ${dailyCheckin.streak} วัน (ถอนไม่ได้)`);
+  showPopeToast(`+${bonus} Points! ต่อเนื่อง ${dailyCheckin.streak} วัน`);
 }
 
 function updateCheckinUI() {
@@ -4095,7 +4132,7 @@ function updateCheckinUI() {
 function savePopeDraft() {
   if (!currentPopeUser) return;
   if (!popePreviewData) {
-	showPopeToast('Nothing to save as draft');
+	showPopeToast('ยังไม่มีเนื้อหาสำหรับบันทึก Draft');
 	return;
   }
   const draft = {
@@ -4112,7 +4149,7 @@ function savePopeDraft() {
   if (popeDrafts.length > 10) popeDrafts.pop();
   savePopeData();
   renderDraftsList();
-  showPopeToast('Draft saved');
+  showPopeToast('บันทึก Draft แล้ว');
 }
 
 function renderDraftsList() {
@@ -4126,44 +4163,48 @@ function renderDraftsList() {
   }
   if (hint) {
 	hint.classList.remove('hidden');
-	hint.innerText = `${popeDrafts.length} saved draft(s)`;
+	hint.innerText = `Drafts (${popeDrafts.length})`;
   }
   box.innerHTML = popeDrafts.map(d => `
-	<div class="flex items-center justify-between p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-[11px]">
-	  <button onclick="loadDraft(${d.id})" class="truncate flex-1 text-left text-zinc-200 hover:text-white">
-		<span class="font-mono uppercase text-[9px] text-zinc-500 mr-1">[${escapePopeHtml(d.type)}]</span>
-		${escapePopeHtml(d.caption || 'Untitled draft')}
-	  </button>
-	  <button onclick="deleteDraft(${d.id})" class="text-zinc-500 hover:text-red-400 ml-2">✕</button>
+	<div class="flex items-center justify-between p-2 rounded-xl bg-zinc-900/90 border border-zinc-800 text-[11px]">
+	  <div onclick="loadPopeDraft(${d.id})" class="truncate flex-1 cursor-pointer pr-2">
+		<span class="font-mono text-zinc-400">[${d.type}]</span>
+		<span class="text-white">${escapePopeHtml(d.caption || 'Untitled draft')}</span>
+	  </div>
+	  <button onclick="deletePopeDraft(${d.id})" class="text-zinc-500 hover:text-red-400 px-1">×</button>
 	</div>
   `).join('');
 }
 
-function loadDraft(id) {
+function loadPopeDraft(id) {
   const d = popeDrafts.find(x => x.id === id);
   if (!d) return;
   setPopePostType(d.type || 'code');
-  popeCodeInput.value = d.code || '';
-  popeUrlInput.value = d.url || '';
+  if (d.code) {
+	popeCodeInput.value = d.code;
+	popePreviewData = { type: 'code', code: d.code };
+  }
+  if (d.url) {
+	popeUrlInput.value = d.url;
+	popePreviewData = { type: 'url', url: d.url };
+  }
   document.getElementById('pope-caption-input').value = d.caption || '';
   document.getElementById('pope-mix-allow-toggle').checked = d.allowMix !== false;
   document.getElementById('pope-mix-price-input').value = d.mixPrice || 10;
-  toggleMixPriceInput();
-  if (d.type === 'code' && d.code) { popePreviewData = { type: 'code', code: d.code }; renderPopeLivePreview(); }
-  else if (d.type === 'url' && d.url) { popePreviewData = { type: 'url', url: d.url }; renderPopeLivePreview(); }
-  showPopeToast('Draft loaded');
+  renderPopeLivePreview();
+  showPopeToast('โหลด Draft แล้ว');
 }
 
-function deleteDraft(id) {
+function deletePopeDraft(id) {
   popeDrafts = popeDrafts.filter(x => x.id !== id);
   savePopeData();
   renderDraftsList();
 }
 
 function openPopeLeaderboard() {
-  hapticImpact('light');
-  renderLeaderboard('creators');
+  closePopeProfileModal();
   document.getElementById('pope-leaderboard-modal').classList.remove('hidden');
+  renderLeaderboard('creators');
 }
 
 function closePopeLeaderboard() {
@@ -4171,77 +4212,73 @@ function closePopeLeaderboard() {
 }
 
 function renderLeaderboard(tab) {
-  const cBtn = document.getElementById('pope-lb-tab-creators');
-  const eBtn = document.getElementById('pope-lb-tab-earners');
-  if (cBtn && eBtn) {
-	cBtn.className = tab === 'creators' ? 'py-1.5 rounded-lg bg-white text-black font-semibold' : 'py-1.5 rounded-lg text-zinc-400 hover:text-white';
-	eBtn.className = tab === 'earners' ? 'py-1.5 rounded-lg bg-white text-black font-semibold' : 'py-1.5 rounded-lg text-zinc-400 hover:text-white';
-  }
+  document.getElementById('pope-lb-tab-creators').className = tab === 'creators' ? 'py-1.5 rounded-lg bg-white text-black font-semibold' : 'py-1.5 rounded-lg text-zinc-400 hover:text-white';
+  document.getElementById('pope-lb-tab-earners').className = tab === 'earners' ? 'py-1.5 rounded-lg bg-white text-black font-semibold' : 'py-1.5 rounded-lg text-zinc-400 hover:text-white';
   const box = document.getElementById('pope-leaderboard-list');
+  const medals = ['🥇','🥈','🥉'];
   if (tab === 'creators') {
-	const map = {};
-	popePosts.forEach(p => {
-	  if (!map[p.username]) map[p.username] = { username: p.username, avatar: p.avatar, likes: 0, gifts: 0, posts: 0 };
-	  map[p.username].likes += (p.likes || 0);
-	  map[p.username].gifts += (p.gifts || 0);
-	  map[p.username].posts += 1;
-	});
-	const rows = Object.values(map).sort((a,b) => (b.likes + b.gifts) - (a.likes + a.gifts));
-	box.innerHTML = rows.map((r, i) => `
-	  <div onclick="closePopeLeaderboard(); openUserProfileModal('${r.username}')" class="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900/80 border border-zinc-800 hover:border-zinc-600 cursor-pointer">
+	const ranked = registeredUsers.map(u => {
+	  const likes = popePosts.filter(p => p.username === u.username).reduce((s, p) => s + p.likes, 0);
+	  return { ...u, totalLikes: likes };
+	}).sort((a, b) => b.totalLikes - a.totalLikes);
+	box.innerHTML = ranked.map((u, i) => `
+	  <div onclick="closePopeLeaderboard(); openUserProfileModal('${u.username}')" class="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900/80 border border-zinc-800 hover:border-zinc-700 cursor-pointer">
 		<div class="flex items-center gap-2.5">
-		  <span class="w-5 text-center font-mono text-xs font-bold ${i === 0 ? 'text-yellow-400' : i === 1 ? 'text-zinc-300' : i === 2 ? 'text-amber-600' : 'text-zinc-500'}">#${i+1}</span>
-		  <img src="${r.avatar}" class="w-8 h-8 rounded-full object-cover border border-zinc-700">
-		  <div><div class="text-xs font-bold text-white">@${escapePopeHtml(r.username)} ${getVerifiedBadgeHTML(r.username)}</div>
-		  <div class="text-[10px] text-zinc-500">${r.posts} posts · ${formatPopeNumber(r.likes)} likes</div></div>
+		  <span class="text-sm w-5 text-center font-bold">${medals[i] || '#' + (i + 1)}</span>
+		  <img src="${u.avatar}" class="w-8 h-8 rounded-full object-cover border border-zinc-700">
+		  <div><div class="text-xs text-white font-semibold">${escapePopeHtml(u.name)}</div>
+		  <div class="text-[10px] text-zinc-500 font-mono">@${escapePopeHtml(u.username)}</div></div>
 		</div>
-		<span class="text-xs font-mono font-bold text-emerald-400">P2:${formatPopeNumber(r.gifts)}p</span>
+		<span class="text-xs font-bold text-white font-mono">${formatPopeNumber(u.totalLikes)} ❤️</span>
 	  </div>
 	`).join('');
   } else {
-	const rows = [...registeredUsers]
-	  .map(u => ({ ...u, p2: getEarnedPoints(u) }))
-	  .sort((a,b) => b.p2 - a.p2);
-	box.innerHTML = rows.map((u, i) => `
-	  <div onclick="closePopeLeaderboard(); openUserProfileModal('${u.username}')" class="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900/80 border border-zinc-800 hover:border-zinc-600 cursor-pointer">
+	const ranked = [...registeredUsers].sort((a, b) => getEarnedPoints(b) - getEarnedPoints(a));
+	box.innerHTML = ranked.map((u, i) => `
+	  <div onclick="closePopeLeaderboard(); openUserProfileModal('${u.username}')" class="flex items-center justify-between p-2.5 rounded-xl bg-zinc-900/80 border border-zinc-800 hover:border-zinc-700 cursor-pointer">
 		<div class="flex items-center gap-2.5">
-		  <span class="w-5 text-center font-mono text-xs font-bold ${i === 0 ? 'text-yellow-400' : 'text-zinc-500'}">#${i+1}</span>
+		  <span class="text-sm w-5 text-center font-bold">${medals[i] || '#' + (i + 1)}</span>
 		  <img src="${u.avatar}" class="w-8 h-8 rounded-full object-cover border border-zinc-700">
-		  <div><div class="text-xs font-bold text-white">${escapePopeHtml(u.name)} ${getVerifiedBadgeHTML(u.username)}</div>
-		  <div class="text-[10px] text-zinc-500 font-mono">@${escapePopeHtml(u.username)} · เติม P1: ${getTopupPoints(u)}p</div></div>
+		  <div><div class="text-xs text-white font-semibold">${escapePopeHtml(u.name)}</div>
+		  <div class="text-[10px] text-zinc-500 font-mono">@${escapePopeHtml(u.username)}</div></div>
 		</div>
-		<span class="text-xs font-mono font-bold text-emerald-400">ถอนได้ ${u.p2}p</span>
+		<span class="text-xs font-bold text-emerald-400 font-mono">${formatPopeNumber(getEarnedPoints(u))}p</span>
 	  </div>
 	`).join('');
   }
-  lucide.createIcons();
 }
 
 function switchProfileContentTab(tab) {
   profileContentTab = tab;
   ['posts','liked','mixed','saved'].forEach(t => {
 	const btn = document.getElementById('pope-pctab-' + t);
-	if (btn) btn.className = t === tab ? 'flex-1 py-1.5 rounded-lg text-[10px] font-bold bg-white text-black' : 'flex-1 py-1.5 rounded-lg text-[10px] font-bold text-zinc-400 hover:text-white';
+	if (!btn) return;
+	btn.className = t === tab
+	  ? 'flex-1 py-1.5 rounded-lg text-[10px] font-bold bg-white text-black'
+	  : 'flex-1 py-1.5 rounded-lg text-[10px] font-bold text-zinc-400 hover:text-white';
   });
   renderPopeMyPostsList();
 }
 
-// INITIALIZATION
-window.addEventListener('DOMContentLoaded', async () => {
+// ===================== BOOTSTRAP =====================
+window.addEventListener('load', async () => {
   initTelegramMiniApp();
   loadPopeData();
-  if (!currentPopeUser) {
-	await tryTelegramAutoLogin(false);
+  syncAdminVisibility();
+
+  const startParam = getBotStartParam();
+  if (startParam && startParam.startsWith('admin_')) {
+	await verifyAdminBotToken(startParam.slice('admin_'.length).trim());
   }
-  if (!currentPopeUser) {
-	const tgUser = getTelegramUser();
-	const statusEl = document.getElementById('pope-tg-env-status');
-	if (statusEl) {
-	  statusEl.innerText = tgUser ? `Detected @${tgUser.username || tgUser.id}` : 'Browser mode (กรอกบัญชีด้านล่าง)';
-	}
-  }
+
+  await pullRealtimeStateFromBot();
   checkAuthStatus();
-  renderTopupLists();
+
+  if (startParam) {
+	handleBotDeepLinkParam(startParam);
+  }
+
+  startBotRealtimeLoop();
   lucide.createIcons();
 });
 </script>
